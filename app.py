@@ -23,7 +23,7 @@ except ImportError:
     DEFAULT_MODEL = "gpt-oss:120b-cloud"
     FINETUNED_MODEL = "gpt-oss:120b-cloud"
 
-app = Flask(__name__, static_folder='static')
+app = Flask(__name__, static_folder='.')
 
 # Configuration CORS pour le déploiement
 CORS(app, resources={
@@ -37,7 +37,7 @@ CORS(app, resources={
 @app.route('/')
 def index():
     """Servir la page d'accueil."""
-    return send_from_directory('static', 'index.html')
+    return send_from_directory('.', 'index.html')
 
 @app.route('/api/generate', methods=['POST'])
 def generate():
