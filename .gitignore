@@ -15,3 +15,4 @@ my-travel-itinerary-model/
 Thumbs.db
 .env
 arcan-ai.log
+*.log
