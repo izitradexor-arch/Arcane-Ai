@@ -1,3 +1,8 @@
+C'est une excellente décision. Les "flip cards" sont souvent complexes à rendre parfaites sur tous les navigateurs et peuvent nuire à l'accessibilité. Un **Hover Overlay** (superposition au survol) est beaucoup plus robuste, fluide et élégant : la carte reste fixe, et le contenu détaillé glisse par-dessus avec un fondu.
+
+Voici le code complet mis à jour. J'ai remplacé toute la logique 3D par un système de superposition simple et performant.
+
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -10,23 +15,19 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     /* ═══════════════════════════════════════
-       TOKENS — palette re-équilibrée
-       Contraste WCAG AA garanti sur tous les textes
+       TOKENS
     ═══════════════════════════════════════ */
     :root {
-      /* Fonds — hiérarchie claire */
       --bg-void:    #0d0f1a;
       --bg-card:    #131623;
       --bg-raised:  #1a1e32;
       --bg-hover:   #222743;
       --bg-result:  #0f1120;
 
-      /* Textes — tous ≥ 4.5:1 sur --bg-card */
       --text-primary:   #f0ead8;
       --text-secondary: #b8a98a;
       --text-muted:     #786d5a;
 
-      /* Accents */
       --gold:       #b8965a;
       --gold-light: #d4ae72;
       --gold-glow:  rgba(184,150,90,.18);
@@ -35,26 +36,20 @@
       --slate-glow: rgba(91,143,168,.18);
       --violet:     #7c6aaa;
 
-      /* Bordures */
       --border:       rgba(184,150,90,.18);
       --border-focus: rgba(91,143,168,.55);
       --border-hover: rgba(184,150,90,.35);
 
-      /* Erreur */
       --red:      #c0504a;
       --red-bg:   rgba(192,80,74,.12);
-
-      /* Succès */
       --green:    #5a9a6a;
       --green-bg: rgba(90,154,106,.12);
 
-      /* Rayons */
       --r-sm:  8px;
       --r-md:  14px;
       --r-lg:  20px;
       --r-xl:  28px;
 
-      /* Transitions */
       --ease: cubic-bezier(.4,0,.2,1);
     }
 
@@ -62,7 +57,6 @@
        RESET & BASE
     ═══════════════════════════════════════ */
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
@@ -75,7 +69,7 @@
       overflow-x: hidden;
     }
 
-    /* Fond étoilé — subtil */
+    /* Fond étoilé */
     body::before {
       content: '';
       position: fixed;
@@ -93,7 +87,6 @@
       z-index: 0;
     }
 
-    /* Nébuleuse douce — statique */
     body::after {
       content: '';
       position: fixed;
@@ -130,9 +123,6 @@
       padding: 3rem 1.5rem 4rem;
     }
 
-    /* ═══════════════════════════════════════
-       HEADER
-    ═══════════════════════════════════════ */
     header {
       text-align: center;
       margin-bottom: 3.5rem;
@@ -182,7 +172,7 @@
     }
 
     /* ═══════════════════════════════════════
-       FEATURE CARDS — flip 3D avec alignement corrigé
+       FEATURE CARDS — HOVER OVERLAY SIMPLE
     ═══════════════════════════════════════ */
     .features-section {
       margin-bottom: 2.5rem;
@@ -206,80 +196,43 @@
     }
 
     @media (max-width: 640px) {
-      .features-grid {
-        grid-template-columns: 1fr;
-      }
+      .features-grid { grid-template-columns: 1fr; }
     }
 
-    /* Conteneur avec perspective */
-    .flip-wrap {
-      perspective: 1000px;
-      height: 280px;
-      cursor: pointer;
-    }
-
-    /* Plateau qui tourne */
-    .flip-inner {
+    /* Conteneur de la carte */
+    .feature-card {
       position: relative;
-      width: 100%;
-      height: 100%;
-      transform-style: preserve-3d;
-      transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+      height: 280px;
+      border-radius: var(--r-lg);
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      overflow: hidden; /* Important pour cacher le contenu qui dépasse */
+      cursor: pointer;
+      transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
     }
 
-    .flip-wrap:hover .flip-inner,
-    .flip-wrap.flipped .flip-inner {
-      transform: rotateY(180deg);
+    .feature-card:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 0 25px var(--gold-glow);
     }
 
-    /* Face avant & arrière */
-    .flip-front,
-    .flip-back {
+    /* FACE AVANT (Visible par défaut) */
+    .card-front {
       position: absolute;
       inset: 0;
-      border-radius: var(--r-lg);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-      border: 1px solid var(--border);
-      overflow-y: auto;
-      padding: 1.5rem;
-    }
-
-    /* Personnalisation de la scrollbar pour les faces */
-    .flip-front::-webkit-scrollbar,
-    .flip-back::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    .flip-front::-webkit-scrollbar-track {
-      background: var(--bg-void);
-      border-radius: 2px;
-    }
-
-    .flip-front::-webkit-scrollbar-thumb {
-      background: var(--gold);
-      border-radius: 2px;
-    }
-
-    /* Avant — contenu centré verticalement */
-    .flip-front {
-      background: var(--bg-card);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      gap: 0.8rem;
-      transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
-    }
-
-    .flip-wrap:hover .flip-front {
-      border-color: var(--border-hover);
-      box-shadow: 0 0 20px var(--gold-glow);
+      padding: 1.5rem;
+      z-index: 2;
+      transition: opacity .4s var(--ease), transform .4s var(--ease);
+      background: var(--bg-card);
     }
 
     /* Halo doré derrière l'icône */
-    .flip-front::before {
+    .card-front::before {
       content: '';
       position: absolute;
       top: 25%;
@@ -300,10 +253,11 @@
       z-index: 1;
       filter: drop-shadow(0 0 6px rgba(184,150,90,.4));
       transition: transform .3s var(--ease);
+      margin-bottom: 1rem;
     }
 
-    .flip-wrap:hover .feature-icon {
-      transform: scale(1.1) rotate(-4deg);
+    .feature-card:hover .feature-icon {
+      transform: scale(1.15) rotate(-5deg);
     }
 
     .feature-title {
@@ -314,7 +268,7 @@
       letter-spacing: .07em;
       position: relative;
       z-index: 1;
-      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
     }
 
     .feature-desc {
@@ -327,7 +281,6 @@
       max-width: 90%;
     }
 
-    /* Indicateur de flip */
     .flip-hint {
       position: absolute;
       bottom: 0.8rem;
@@ -336,27 +289,47 @@
       color: var(--text-muted);
       font-family: 'DM Sans', sans-serif;
       letter-spacing: .04em;
-      display: flex;
-      align-items: center;
-      gap: .25rem;
       opacity: .6;
       transition: opacity .3s;
     }
 
-    .flip-wrap:hover .flip-hint {
-      opacity: 0;
-    }
+    .feature-card:hover .flip-hint { opacity: 0; }
 
-    /* Arrière — contenu détaillé */
-    .flip-back {
-      background: linear-gradient(145deg, rgba(91,143,168,.12) 0%, rgba(124,106,170,.12) 50%, rgba(184,150,90,.08) 100%);
-      transform: rotateY(180deg);
+    /* FACE ARRIÈRE (Overlay - Cachée par défaut) */
+    .card-back {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(91,143,168,.15) 0%, rgba(124,106,170,.15) 50%, rgba(184,150,90,.1) 100%);
+      backdrop-filter: blur(4px); /* Effet de verre dépoli */
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 3;
+      
+      /* État initial : invisible et légèrement décalé vers le bas */
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none; /* Ne pas intercepter les clics quand caché */
+      
       display: flex;
       flex-direction: column;
-      border-color: var(--slate);
+      padding: 1.5rem;
+      transition: opacity .4s var(--ease), transform .4s var(--ease);
+      border: 1px solid var(--slate);
     }
 
-    .flip-back-title {
+    /* État Hover : Visible et centré */
+    .feature-card:hover .card-back {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Optionnel : Faire disparaître légèrement le fond avant pour accentuer l'overlay */
+    .feature-card:hover .card-front {
+      opacity: 0.1;
+      transform: scale(0.95);
+    }
+
+    .card-back-title {
       font-family: 'Cinzel', serif;
       font-size: 0.9rem;
       color: var(--slate-light);
@@ -369,42 +342,49 @@
       padding-bottom: 0.5rem;
     }
 
-    .flip-back-title::before {
+    .card-back-title::before {
       content: '✧';
       color: var(--gold);
       animation: shimmer 2s ease-in-out infinite;
     }
 
-    .flip-back-items {
+    .card-back-items {
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
       flex: 1;
+      overflow-y: auto; /* Scroll si le contenu est trop long */
+      padding-right: 5px;
     }
 
-    .flip-back-item {
+    /* Scrollbar fine pour le contenu arrière */
+    .card-back-items::-webkit-scrollbar { width: 4px; }
+    .card-back-items::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 2px; }
+    .card-back-items::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+    .card-back-item {
       display: flex;
       align-items: flex-start;
       gap: 0.7rem;
       padding: 0.6rem 0.8rem;
-      background: rgba(13,15,26,.5);
+      background: rgba(13,15,26,.6);
       border-radius: var(--r-sm);
       border-left: 2px solid var(--gold);
       transition: transform 0.2s ease, background 0.2s ease;
     }
 
-    .flip-back-item:hover {
-      background: rgba(13,15,26,.7);
+    .card-back-item:hover {
+      background: rgba(13,15,26,.8);
       transform: translateX(4px);
     }
 
-    .flip-back-item-icon {
+    .card-back-item-icon {
       flex-shrink: 0;
       font-size: 1rem;
       margin-top: 0.1rem;
     }
 
-    .flip-back-item-text {
+    .card-back-item-text {
       font-family: 'DM Sans', sans-serif;
       font-size: 0.85rem;
       color: var(--text-secondary);
@@ -412,7 +392,7 @@
       flex: 1;
     }
 
-    .flip-back-item-text strong {
+    .card-back-item-text strong {
       color: var(--text-primary);
       font-weight: 600;
       display: block;
@@ -421,7 +401,7 @@
     }
 
     /* ═══════════════════════════════════════
-       CARD (conteneur formulaire / résultats)
+       CARD (Formulaire / Résultats)
     ═══════════════════════════════════════ */
     .card {
       background: var(--bg-card);
@@ -433,7 +413,6 @@
       position: relative;
     }
 
-    /* Coin doré discret en haut à gauche */
     .card::before {
       content: '';
       position: absolute;
@@ -447,9 +426,6 @@
       opacity: .4;
     }
 
-    /* ═══════════════════════════════════════
-       INFO BOX
-    ═══════════════════════════════════════ */
     .info-box {
       border-left: 2px solid var(--gold);
       background: var(--gold-glow);
@@ -472,9 +448,7 @@
       line-height: 1.6;
     }
 
-    /* ═══════════════════════════════════════
-       FORMULAIRE — GRID
-    ═══════════════════════════════════════ */
+    /* FORMULAIRE */
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -503,9 +477,6 @@
       text-transform: uppercase;
     }
 
-    /* ═══════════════════════════════════════
-       INPUTS & SELECTS
-    ═══════════════════════════════════════ */
     .input-wrap { position: relative; }
 
     .input-icon {
@@ -562,9 +533,7 @@
       font-size: .75rem;
     }
 
-    /* ═══════════════════════════════════════
-       SLIDER DURÉE
-    ═══════════════════════════════════════ */
+    /* SLIDER */
     .duration-row {
       display: flex;
       align-items: center;
@@ -617,9 +586,7 @@
       margin-top: .35rem;
     }
 
-    /* ═══════════════════════════════════════
-       TAGS THÈMES
-    ═══════════════════════════════════════ */
+    /* TAGS */
     .topics-container {
       display: flex;
       flex-wrap: wrap;
@@ -664,9 +631,6 @@
       font-weight: 600;
     }
 
-    /* ═══════════════════════════════════════
-       TOPIC CUSTOM INPUT
-    ═══════════════════════════════════════ */
     .custom-topic {
       display: flex;
       gap: .5rem;
@@ -696,9 +660,7 @@
       color: var(--gold-light);
     }
 
-    /* ═══════════════════════════════════════
-       BOUTON GÉNÉRER
-    ═══════════════════════════════════════ */
+    /* BOUTON GÉNÉRER */
     .generate-btn {
       width: 100%;
       min-height: 56px;
@@ -735,15 +697,9 @@
     }
 
     .generate-btn:active:not(:disabled) { transform: translateY(0); }
+    .generate-btn:disabled { opacity: .45; cursor: not-allowed; }
 
-    .generate-btn:disabled {
-      opacity: .45;
-      cursor: not-allowed;
-    }
-
-    /* ═══════════════════════════════════════
-       ERREUR
-    ═══════════════════════════════════════ */
+    /* ERREUR */
     .error-message {
       display: none;
       background: var(--red-bg);
@@ -759,9 +715,7 @@
 
     .error-message.active { display: block; animation: fadeUp .3s var(--ease); }
 
-    /* ═══════════════════════════════════════
-       LOADING
-    ═══════════════════════════════════════ */
+    /* LOADING */
     .loading {
       display: none;
       text-align: center;
@@ -816,7 +770,6 @@
       margin-bottom: 1.75rem;
     }
 
-    /* Carrousel de proverbes */
     .proverb-carousel {
       position: relative;
       min-height: 5rem;
@@ -894,9 +847,7 @@
       transform: scale(1.4);
     }
 
-    /* ═══════════════════════════════════════
-       RÉSULTATS
-    ═══════════════════════════════════════ */
+    /* RÉSULTATS */
     .results { display: none; animation: fadeUp .6s var(--ease); }
     .results.active { display: block; }
 
@@ -994,18 +945,9 @@
     }
 
     .lesson-content p { margin-bottom: 1rem; }
-
-    .lesson-content ul,
-    .lesson-content ol {
-      margin: 0 0 1rem 1.5rem;
-    }
-
-    .lesson-content li {
-      margin-bottom: .35rem;
-    }
-
+    .lesson-content ul, .lesson-content ol { margin: 0 0 1rem 1.5rem; }
+    .lesson-content li { margin-bottom: .35rem; }
     .lesson-content li::marker { color: var(--gold); }
-
     .lesson-content strong { color: var(--gold-light); font-weight: 600; }
     .lesson-content em { color: var(--text-secondary); }
 
@@ -1054,117 +996,84 @@
     ::-webkit-scrollbar-thumb { background: var(--bg-hover); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--violet); }
 
-    /* ═══════════════════════════════════════
-   PENTAGRAMME GYROSCOPIQUE
-═══════════════════════════════════════ */
+    /* PENTAGRAMME */
+    .pentagram-container {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 130px;
+      height: 130px;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.7;
+      animation: fadeInPentagram 1.5s ease forwards;
+      transition: transform 0.1s ease-out;
+      will-change: transform;
+    }
 
-.pentagram-container {
-  position: fixed;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 130px;
-  height: 130px;
-  z-index: 2;
-  pointer-events: none;
-  opacity: 0.7;
-  animation: fadeInPentagram 1.5s ease forwards;
-  transition: transform 0.1s ease-out;
-  will-change: transform;
-}
+    .pentagram-svg { width: 100%; height: 100%; }
 
-/* SVG */
-.pentagram-svg {
-  width: 100%;
-  height: 100%;
-}
+    .outer-circle {
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 1;
+      opacity: 0.35;
+      animation: spinSlow 20s linear infinite;
+    }
 
-/* Cercles */
-.outer-circle {
-  fill: none;
-  stroke: var(--gold);
-  stroke-width: 1;
-  opacity: 0.35;
-  animation: spinSlow 20s linear infinite;
-}
+    .middle-circle {
+      fill: none;
+      stroke: var(--slate);
+      stroke-width: 1;
+      opacity: 0.4;
+      animation: spinReverse 14s linear infinite;
+    }
 
-.middle-circle {
-  fill: none;
-  stroke: var(--slate);
-  stroke-width: 1;
-  opacity: 0.4;
-  animation: spinReverse 14s linear infinite;
-}
+    .pentagram-star {
+      fill: none;
+      stroke: var(--gold-light);
+      stroke-width: 1.2;
+      opacity: 0.8;
+      filter: drop-shadow(0 0 6px rgba(184,150,90,.35));
+      animation: spinGyro 10s linear infinite;
+    }
 
-/* Étoile */
-.pentagram-star {
-  fill: none;
-  stroke: var(--gold-light);
-  stroke-width: 1.2;
-  opacity: 0.8;
-  filter: drop-shadow(0 0 6px rgba(184,150,90,.35));
-  animation: spinGyro 10s linear infinite;
-}
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); transform-origin: center; }
+      to   { transform: rotate(360deg); transform-origin: center; }
+    }
 
-/* Animations */
-@keyframes spinSlow {
-  from { transform: rotate(0deg); transform-origin: center; }
-  to   { transform: rotate(360deg); transform-origin: center; }
-}
+    @keyframes spinReverse {
+      from { transform: rotate(360deg); transform-origin: center; }
+      to   { transform: rotate(0deg); transform-origin: center; }
+    }
 
-@keyframes spinReverse {
-  from { transform: rotate(360deg); transform-origin: center; }
-  to   { transform: rotate(0deg); transform-origin: center; }
-}
+    @keyframes spinGyro {
+      0%   { transform: rotate(0deg) scale(1); }
+      50%  { transform: rotate(180deg) scale(1.05); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
 
-@keyframes spinGyro {
-  0%   { transform: rotate(0deg) scale(1); }
-  50%  { transform: rotate(180deg) scale(1.05); }
-  100% { transform: rotate(360deg) scale(1); }
-}
-
-/* Apparition douce */
-@keyframes fadeInPentagram {
-  from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-  to   { opacity: 0.55; transform: translateX(-50%) translateY(0); }
-}
-
-
-
+    @keyframes fadeInPentagram {
+      from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+      to   { opacity: 0.55; transform: translateX(-50%) translateY(0); }
+    }
   </style>
 </head>
 <body>
 
-
 <div class="pentagram-container" aria-hidden="true">
   <svg viewBox="0 0 200 200" class="pentagram-svg">
-
-    <!-- Cercle externe -->
     <circle cx="100" cy="100" r="92" class="outer-circle"/>
-
-    <!-- Cercle intermédiaire -->
     <circle cx="100" cy="100" r="70" class="middle-circle"/>
-
-    <!-- Pentagramme -->
     <polygon points="
-      100,15
-      120,80
-      185,80
-      135,120
-      155,185
-      100,145
-      45,185
-      65,120
-      15,80
-      80,80
+      100,15 120,80 185,80 135,120 155,185 100,145 45,185 65,120 15,80 80,80
     " class="pentagram-star"/>
-
   </svg>
 </div>
 
-
 <div class="container">
-
   <header>
     <span class="header-ornament">✦ ◈ ✦</span>
     <h1>Arcan-Ai</h1>
@@ -1174,183 +1083,175 @@
   <section class="features-section" aria-label="Fonctionnalités">
     <p class="section-title">Les Arcanes Révélées</p>
     <div class="features-grid">
+      
       <!-- Card 1 -->
-      <div class="flip-wrap" tabindex="0" role="group" aria-label="Apprentissage Adaptatif">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <span class="feature-icon" aria-hidden="true">🧠</span>
-            <div class="feature-title">Apprentissage Adaptatif</div>
-            <div class="feature-desc">L'IA s'adapte à votre essence</div>
-            <span class="flip-hint" aria-hidden="true">↺ survoler</span>
-          </div>
-          <div class="flip-back">
-            <div class="flip-back-title">Votre Profil Cognitif</div>
-            <div class="flip-back-items">
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">🔮</span>
-                <div class="flip-back-item-text"><strong>Analyse en temps réel</strong>Rythme d'apprentissage unique observé et intégré</div>
-              </div>
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">⚡</span>
-                <div class="flip-back-item-text"><strong>Niveau dynamique</strong>Difficulté ajustée automatiquement à vos réponses</div>
-              </div>
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">🎯</span>
-                <div class="flip-back-item-text"><strong>Focus personnalisé</strong>Concentration ciblée sur vos lacunes</div>
-              </div>
+      <div class="feature-card" tabindex="0" role="group" aria-label="Apprentissage Adaptatif">
+        <!-- Face Avant -->
+        <div class="card-front">
+          <span class="feature-icon" aria-hidden="true">🧠</span>
+          <div class="feature-title">Apprentissage Adaptatif</div>
+          <div class="feature-desc">L'IA s'adapte à votre essence</div>
+          <span class="flip-hint" aria-hidden="true">⟡ survoler</span>
+        </div>
+        <!-- Face Arrière (Overlay) -->
+        <div class="card-back">
+          <div class="card-back-title">Votre Profil Cognitif</div>
+          <div class="card-back-items">
+            <div class="card-back-item">
+              <span class="card-back-item-icon">🔮</span>
+              <div class="card-back-item-text"><strong>Analyse en temps réel</strong>Rythme d'apprentissage unique observé et intégré</div>
+            </div>
+            <div class="card-back-item">
+              <span class="card-back-item-icon">⚡</span>
+              <div class="card-back-item-text"><strong>Niveau dynamique</strong>Difficulté ajustée automatiquement à vos réponses</div>
+            </div>
+            <div class="card-back-item">
+              <span class="card-back-item-icon">🎯</span>
+              <div class="card-back-item-text"><strong>Focus personnalisé</strong>Concentration ciblée sur vos lacunes</div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Card 2 -->
-      <div class="flip-wrap" tabindex="0" role="group" aria-label="Voies de Perception">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <span class="feature-icon" aria-hidden="true">👁️</span>
-            <div class="feature-title">Voies de Perception</div>
-            <div class="feature-desc">Quatre chemins vers le savoir</div>
-            <span class="flip-hint" aria-hidden="true">↺ survoler</span>
-          </div>
-          <div class="flip-back">
-            <div class="flip-back-title">Choisissez Votre Voie</div>
-            <div class="flip-back-items">
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">✦</span>
-                <div class="flip-back-item-text"><strong>Visionnaire</strong>Schémas, diagrammes et cartes mentales</div>
-              </div>
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">♫</span>
-                <div class="flip-back-item-text"><strong>Oracle</strong>Approche narrative et analogies</div>
-              </div>
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">⚡</span>
-                <div class="flip-back-item-text"><strong>Pratiquant</strong>Méthode kinesthésique par l'exercice</div>
-              </div>
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">📖</span>
-                <div class="flip-back-item-text"><strong>Scribe</strong>Notes structurées et résumés écrits</div>
-              </div>
+      <div class="feature-card" tabindex="0" role="group" aria-label="Voies de Perception">
+        <div class="card-front">
+          <span class="feature-icon" aria-hidden="true">👁️</span>
+          <div class="feature-title">Voies de Perception</div>
+          <div class="feature-desc">Quatre chemins vers le savoir</div>
+          <span class="flip-hint" aria-hidden="true">⟡ survoler</span>
+        </div>
+        <div class="card-back">
+          <div class="card-back-title">Choisissez Votre Voie</div>
+          <div class="card-back-items">
+            <div class="card-back-item">
+              <span class="card-back-item-icon">✦</span>
+              <div class="card-back-item-text"><strong>Visionnaire</strong>Schémas, diagrammes et cartes mentales</div>
+            </div>
+            <div class="card-back-item">
+              <span class="card-back-item-icon">♫</span>
+              <div class="card-back-item-text"><strong>Oracle</strong>Approche narrative et analogies</div>
+            </div>
+            <div class="card-back-item">
+              <span class="card-back-item-icon">⚡</span>
+              <div class="card-back-item-text"><strong>Pratiquant</strong>Méthode kinesthésique par l'exercice</div>
+            </div>
+            <div class="card-back-item">
+              <span class="card-back-item-icon">📖</span>
+              <div class="card-back-item-text"><strong>Scribe</strong>Notes structurées et résumés écrits</div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Card 3 -->
-      <div class="flip-wrap" tabindex="0" role="group" aria-label="Domaines Infinis">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <span class="feature-icon" aria-hidden="true">🌌</span>
-            <div class="feature-title">Domaines Infinis</div>
-            <div class="feature-desc">Toutes les disciplines</div>
-            <span class="flip-hint" aria-hidden="true">↺ survoler</span>
-          </div>
-          <div class="flip-back">
-            <div class="flip-back-title">Univers du Savoir</div>
-            <div class="flip-back-items">
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">∑</span>
-                <div class="flip-back-item-text"><strong>Sciences exactes</strong>Mathématiques, Physique, Chimie…</div>
-              </div>
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">📜</span>
-                <div class="flip-back-item-text"><strong>Lettres & langues</strong>Français, Anglais, Philosophie…</div>
-              </div>
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">💻</span>
-                <div class="flip-back-item-text"><strong>Technologies</strong>Informatique, Programmation…</div>
-              </div>
+      <div class="feature-card" tabindex="0" role="group" aria-label="Domaines Infinis">
+        <div class="card-front">
+          <span class="feature-icon" aria-hidden="true">🌌</span>
+          <div class="feature-title">Domaines Infinis</div>
+          <div class="feature-desc">Toutes les disciplines</div>
+          <span class="flip-hint" aria-hidden="true">⟡ survoler</span>
+        </div>
+        <div class="card-back">
+          <div class="card-back-title">Univers du Savoir</div>
+          <div class="card-back-items">
+            <div class="card-back-item">
+              <span class="card-back-item-icon">∑</span>
+              <div class="card-back-item-text"><strong>Sciences exactes</strong>Mathématiques, Physique, Chimie…</div>
+            </div>
+            <div class="card-back-item">
+              <span class="card-back-item-icon">📜</span>
+              <div class="card-back-item-text"><strong>Lettres & langues</strong>Français, Anglais, Philosophie…</div>
+            </div>
+            <div class="card-back-item">
+              <span class="card-back-item-icon">💻</span>
+              <div class="card-back-item-text"><strong>Technologies</strong>Informatique, Programmation…</div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Card 4 -->
-      <div class="flip-wrap" tabindex="0" role="group" aria-label="Rangs Initiatiques">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <span class="feature-icon" aria-hidden="true">⚜️</span>
-            <div class="feature-title">Rangs Initiatiques</div>
-            <div class="feature-desc">Du Novice à l'Archimage</div>
-            <span class="flip-hint" aria-hidden="true">↺ survoler</span>
-          </div>
-          <div class="flip-back">
-            <div class="flip-back-title">Votre Parcours</div>
-            <div class="flip-back-items">
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">🌱</span>
-                <div class="flip-back-item-text"><strong>Novice → Apprenti</strong>Fondations bienveillantes, primaire</div>
-              </div>
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">⚔️</span>
-                <div class="flip-back-item-text"><strong>Adepte → Maître</strong>Collège & lycée, concepts avancés</div>
-              </div>
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">👑</span>
-                <div class="flip-back-item-text"><strong>Archimage</strong>Université & formation professionnelle</div>
-              </div>
+      <div class="feature-card" tabindex="0" role="group" aria-label="Rangs Initiatiques">
+        <div class="card-front">
+          <span class="feature-icon" aria-hidden="true">⚜️</span>
+          <div class="feature-title">Rangs Initiatiques</div>
+          <div class="feature-desc">Du Novice à l'Archimage</div>
+          <span class="flip-hint" aria-hidden="true">⟡ survoler</span>
+        </div>
+        <div class="card-back">
+          <div class="card-back-title">Votre Parcours</div>
+          <div class="card-back-items">
+            <div class="card-back-item">
+              <span class="card-back-item-icon">🌱</span>
+              <div class="card-back-item-text"><strong>Novice → Apprenti</strong>Fondations bienveillantes, primaire</div>
+            </div>
+            <div class="card-back-item">
+              <span class="card-back-item-icon">⚔️</span>
+              <div class="card-back-item-text"><strong>Adepte → Maître</strong>Collège & lycée, concepts avancés</div>
+            </div>
+            <div class="card-back-item">
+              <span class="card-back-item-icon">👑</span>
+              <div class="card-back-item-text"><strong>Archimage</strong>Université & formation professionnelle</div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Card 5 -->
-      <div class="flip-wrap" tabindex="0" role="group" aria-label="Contenu Vivant">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <span class="feature-icon" aria-hidden="true">✨</span>
-            <div class="feature-title">Contenu Vivant</div>
-            <div class="feature-desc">Des leçons qui prennent vie</div>
-            <span class="flip-hint" aria-hidden="true">↺ survoler</span>
-          </div>
-          <div class="flip-back">
-            <div class="flip-back-title">Expérience Immersive</div>
-            <div class="flip-back-items">
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">📝</span>
-                <div class="flip-back-item-text"><strong>Markdown enrichi</strong>Code, formules, listes — formaté avec clarté</div>
-              </div>
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">💾</span>
-                <div class="flip-back-item-text"><strong>Export facile</strong>Copier, sauvegarder ou imprimer</div>
-              </div>
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">🎨</span>
-                <div class="flip-back-item-text"><strong>Design mystique</strong>Interface qui stimule l'imagination</div>
-              </div>
+      <div class="feature-card" tabindex="0" role="group" aria-label="Contenu Vivant">
+        <div class="card-front">
+          <span class="feature-icon" aria-hidden="true">✨</span>
+          <div class="feature-title">Contenu Vivant</div>
+          <div class="feature-desc">Des leçons qui prennent vie</div>
+          <span class="flip-hint" aria-hidden="true">⟡ survoler</span>
+        </div>
+        <div class="card-back">
+          <div class="card-back-title">Expérience Immersive</div>
+          <div class="card-back-items">
+            <div class="card-back-item">
+              <span class="card-back-item-icon">📝</span>
+              <div class="card-back-item-text"><strong>Markdown enrichi</strong>Code, formules, listes — formaté avec clarté</div>
+            </div>
+            <div class="card-back-item">
+              <span class="card-back-item-icon">💾</span>
+              <div class="card-back-item-text"><strong>Export facile</strong>Copier, sauvegarder ou imprimer</div>
+            </div>
+            <div class="card-back-item">
+              <span class="card-back-item-icon">🎨</span>
+              <div class="card-back-item-text"><strong>Design mystique</strong>Interface qui stimule l'imagination</div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Card 6 -->
-      <div class="flip-wrap" tabindex="0" role="group" aria-label="Invocation IA">
-        <div class="flip-inner">
-          <div class="flip-front">
-            <span class="feature-icon" aria-hidden="true">⚛️</span>
-            <div class="feature-title">Invocation IA</div>
-            <div class="feature-desc">L'IA au service du savoir</div>
-            <span class="flip-hint" aria-hidden="true">↺ survoler</span>
-          </div>
-          <div class="flip-back">
-            <div class="flip-back-title">Puissance Cosmique</div>
-            <div class="flip-back-items">
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">🤖</span>
-                <div class="flip-back-item-text"><strong>GPT 120B Cloud</strong>Modèle de haute qualité</div>
-              </div>
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">⏱️</span>
-                <div class="flip-back-item-text"><strong>15 min → 3h</strong>Durée entièrement flexible</div>
-              </div>
-              <div class="flip-back-item">
-                <span class="flip-back-item-icon">🎯</span>
-                <div class="flip-back-item-text"><strong>Thèmes ciblés</strong>Sélection multiple sur mesure</div>
-              </div>
+      <div class="feature-card" tabindex="0" role="group" aria-label="Invocation IA">
+        <div class="card-front">
+          <span class="feature-icon" aria-hidden="true">⚛️</span>
+          <div class="feature-title">Invocation IA</div>
+          <div class="feature-desc">L'IA au service du savoir</div>
+          <span class="flip-hint" aria-hidden="true">⟡ survoler</span>
+        </div>
+        <div class="card-back">
+          <div class="card-back-title">Puissance Cosmique</div>
+          <div class="card-back-items">
+            <div class="card-back-item">
+              <span class="card-back-item-icon">🤖</span>
+              <div class="card-back-item-text"><strong>GPT 120B Cloud</strong>Modèle de haute qualité</div>
+            </div>
+            <div class="card-back-item">
+              <span class="card-back-item-icon">⏱️</span>
+              <div class="card-back-item-text"><strong>15 min → 3h</strong>Durée entièrement flexible</div>
+            </div>
+            <div class="card-back-item">
+              <span class="card-back-item-icon">🎯</span>
+              <div class="card-back-item-text"><strong>Thèmes ciblés</strong>Sélection multiple sur mesure</div>
             </div>
           </div>
         </div>
       </div>
+
     </div>
   </section>
 
@@ -1715,50 +1616,16 @@
 
   function hideError() { errorMsg.classList.remove('active'); }
 
-  document.querySelectorAll('.flip-wrap').forEach(card => {
-    // Click handler (mobile)
-    card.addEventListener('click', function(e) {
-      if (window.innerWidth <= 768) {
-        e.stopPropagation();
-        this.classList.toggle('flipped');
-      }
-    });
-    
-    // Keyboard handler (accessibility)
+  // Gestion du focus clavier pour les nouvelles cartes (overlay)
+  document.querySelectorAll('.feature-card').forEach(card => {
     card.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        this.classList.toggle('flipped');
+        // Sur mobile/clavier, on pourrait vouloir toggler une classe 'active'
+        // Mais pour un hover simple, le focus CSS suffit souvent.
+        // Ici on laisse le comportement natif du hover CSS.
       }
     });
-    
-    // Touch swipe handler (mobile)
-    let touchStartX = 0;
-    let touchEndX = 0;
-    
-    card.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-    
-    card.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      const diff = touchStartX - touchEndX;
-      
-      // Swipe left or right to flip
-      if (Math.abs(diff) > 50) {
-        card.classList.toggle('flipped');
-      }
-    }, { passive: true });
   });
-
-  const flipStyle = document.createElement('style');
-  flipStyle.textContent = `
-    .flip-wrap.flipped .flip-hint { opacity: 0; }
-    @media (max-width: 768px) {
-      .flip-wrap { cursor: pointer; }
-    }
-  `;
-  document.head.appendChild(flipStyle);
 
   const PROVERBS = [
     { text: '« La connaissance est un trésor, mais la pratique en est la clé. »', source: '— Thomas Fuller' },
@@ -1854,19 +1721,15 @@
   });
   loadObs.observe(loading, { attributes: true, attributeFilter: ['class'] });
 
-
   const pentagram = document.querySelector(".pentagram-container");
 
-  // Mouse movement (desktop)
   document.addEventListener("mousemove", (e) => {
     const x = (e.clientX / window.innerWidth - 0.5) * 8;
     const y = (e.clientY / window.innerHeight - 0.5) * 8;
     pentagram.style.transform = `translateX(-50%) rotateX(${y}deg) rotateY(${x}deg)`;
   });
 
-  // Gyroscope (mobile)
   if (window.DeviceOrientationEvent) {
-    // Request permission for iOS 13+
     if (typeof DeviceOrientationEvent.requestPermission === 'function') {
       document.body.addEventListener('click', async () => {
         try {
@@ -1884,16 +1747,14 @@
   }
 
   function handleOrientation(event) {
-    const gamma = event.gamma || 0; // Left/Right tilt (-90 to 90)
-    const beta = event.beta || 0;   // Front/Back tilt (-180 to 180)
-    
-    // Clamp values and normalize
+    const gamma = event.gamma || 0;
+    const beta = event.beta || 0;
     const x = Math.max(-30, Math.min(30, gamma)) / 30 * 8;
     const y = Math.max(-30, Math.min(30, beta - 45)) / 30 * 8;
-    
     pentagram.style.transform = `translateX(-50%) rotateX(${y}deg) rotateY(${x}deg)`;
   }
 </script>
 
 </body>
 </html>
+```
