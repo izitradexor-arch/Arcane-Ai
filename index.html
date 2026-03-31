@@ -1067,8 +1067,10 @@
   height: 130px;
   z-index: 2;
   pointer-events: none;
-  opacity: 0.55;
+  opacity: 0.7;
   animation: fadeInPentagram 1.5s ease forwards;
+  transition: transform 0.1s ease-out;
+  will-change: transform;
 }
 
 /* SVG */
@@ -1714,12 +1716,39 @@
   function hideError() { errorMsg.classList.remove('active'); }
 
   document.querySelectorAll('.flip-wrap').forEach(card => {
+    // Click handler (mobile)
     card.addEventListener('click', function(e) {
       if (window.innerWidth <= 768) {
         e.stopPropagation();
         this.classList.toggle('flipped');
       }
     });
+    
+    // Keyboard handler (accessibility)
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.classList.toggle('flipped');
+      }
+    });
+    
+    // Touch swipe handler (mobile)
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    card.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    card.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      
+      // Swipe left or right to flip
+      if (Math.abs(diff) > 50) {
+        card.classList.toggle('flipped');
+      }
+    }, { passive: true });
   });
 
   const flipStyle = document.createElement('style');
@@ -1829,13 +1858,42 @@
 
   const pentagram = document.querySelector(".pentagram-container");
 
-document.addEventListener("mousemove", (e) => {
-  const x = (e.clientX / window.innerWidth - 0.5) * 8;
-  const y = (e.clientY / window.innerHeight - 0.5) * 8;
+  // Mouse movement (desktop)
+  document.addEventListener("mousemove", (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 8;
+    const y = (e.clientY / window.innerHeight - 0.5) * 8;
+    pentagram.style.transform = `translateX(-50%) rotateX(${y}deg) rotateY(${x}deg)`;
+  });
 
-  pentagram.style.transform =
-    `translateX(-50%) rotateX(${y}deg) rotateY(${x}deg)`;
-});
+  // Gyroscope (mobile)
+  if (window.DeviceOrientationEvent) {
+    // Request permission for iOS 13+
+    if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+      document.body.addEventListener('click', async () => {
+        try {
+          const permission = await DeviceOrientationEvent.requestPermission();
+          if (permission === 'granted') {
+            window.addEventListener('deviceorientation', handleOrientation);
+          }
+        } catch (e) {
+          console.log('Gyroscope permission denied');
+        }
+      }, { once: true });
+    } else {
+      window.addEventListener('deviceorientation', handleOrientation);
+    }
+  }
+
+  function handleOrientation(event) {
+    const gamma = event.gamma || 0; // Left/Right tilt (-90 to 90)
+    const beta = event.beta || 0;   // Front/Back tilt (-180 to 180)
+    
+    // Clamp values and normalize
+    const x = Math.max(-30, Math.min(30, gamma)) / 30 * 8;
+    const y = Math.max(-30, Math.min(30, beta - 45)) / 30 * 8;
+    
+    pentagram.style.transform = `translateX(-50%) rotateX(${y}deg) rotateY(${x}deg)`;
+  }
 </script>
 
 </body>
