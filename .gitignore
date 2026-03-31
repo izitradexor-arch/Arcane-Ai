@@ -13,3 +13,5 @@ my-travel-itinerary-model/
 # OS files
 .DS_Store
 Thumbs.db
+.env
+arcan-ai.log

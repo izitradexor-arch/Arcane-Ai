@@ -3,960 +3,589 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grimoire Quantique – Tuteur Éducatif Mystique</title>
+    <title>Arcan-Ai – Tuteur Éducatif Mystique</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Cormorant+Garamond:wght@300;400;600;700&family=Philosopher:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         :root {
-            /* Palette Astrologique & Médiévale */
-            --cosmic-void: #0a0e27;
-            --deep-purple: #1a0033;
-            --mystic-gold: #d4af37;
+            --cosmic-void:    #0a0e27;
+            --deep-purple:    #1a0033;
+            --mystic-gold:    #d4af37;
             --celestial-blue: #4169e1;
-            --quantum-cyan: #00ffff;
-            --nebula-purple: #9d4edd;
-            --stardust-silver: #c0c0c0;
-            --parchment: #f4e8d0;
+            --quantum-cyan:   #00ffff;
+            --nebula-purple:  #9d4edd;
+            --stardust-silver:#c0c0c0;
+            --parchment:      #f4e8d0;
             --ancient-bronze: #cd7f32;
             --ethereal-white: #f0f4f8;
-            --cosmic-gradient: linear-gradient(135deg, #0a0e27 0%, #1a0033 50%, #2d1b69 100%);
+            --cosmic-gradient:linear-gradient(135deg,#0a0e27 0%,#1a0033 50%,#2d1b69 100%);
         }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Cormorant Garamond',serif;background:var(--cosmic-void);color:var(--ethereal-white);min-height:100vh;overflow-x:hidden;position:relative}
+        body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(2px 2px at 20% 30%,white,transparent),radial-gradient(2px 2px at 60% 70%,white,transparent),radial-gradient(1px 1px at 50% 50%,white,transparent),radial-gradient(1px 1px at 80% 10%,white,transparent),radial-gradient(2px 2px at 90% 60%,white,transparent),radial-gradient(1px 1px at 33% 80%,white,transparent),radial-gradient(1px 1px at 15% 60%,white,transparent),var(--cosmic-gradient);background-size:200% 200%;animation:cosmicDrift 60s ease-in-out infinite;pointer-events:none;z-index:0}
+        body::after{content:'';position:fixed;top:-50%;right:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 40%,rgba(157,78,221,.2) 0%,transparent 50%),radial-gradient(circle at 70% 60%,rgba(0,255,255,.15) 0%,transparent 50%);animation:nebulaFloat 40s ease-in-out infinite alternate;pointer-events:none;z-index:0}
+        @keyframes cosmicDrift{0%,100%{transform:translate(0,0) rotate(0deg);background-position:0% 0%}50%{transform:translate(-10px,10px) rotate(1deg);background-position:100% 100%}}
+        @keyframes nebulaFloat{0%{transform:translate(0,0) rotate(0deg);opacity:.3}100%{transform:translate(-50px,50px) rotate(5deg);opacity:.6}}
+        .quantum-particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;overflow:hidden}
+        .particle{position:absolute;width:3px;height:3px;background:var(--quantum-cyan);border-radius:50%;box-shadow:0 0 10px var(--quantum-cyan);animation:particleFloat 15s infinite}
+        @keyframes particleFloat{0%{transform:translateY(100vh) translateX(0) scale(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-100px) translateX(100px) scale(1);opacity:0}}
+        .container{position:relative;z-index:10;max-width:1400px;margin:0 auto;padding:60px 30px}
+        header{text-align:center;margin-bottom:80px;animation:fadeInDown .8s ease-out;position:relative}
+        header::before{content:'✦ ━━━━━━━ ◈ ✧ ◈ ━━━━━━━ ✦';display:block;color:var(--mystic-gold);font-size:1.2rem;margin-bottom:20px;letter-spacing:3px;text-shadow:0 0 20px rgba(212,175,55,.6)}
+        @keyframes fadeInDown{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}
+        h1{font-family:'Cinzel',serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:900;background:linear-gradient(135deg,var(--mystic-gold) 0%,var(--quantum-cyan) 50%,var(--nebula-purple) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:15px;letter-spacing:3px;line-height:1.2;position:relative}
+        h1::before,h1::after{content:'✧';position:absolute;font-size:2rem;color:var(--quantum-cyan);animation:twinkle 2s ease-in-out infinite}
+        h1::before{left:-50px;top:0}
+        h1::after{right:-50px;top:0;animation-delay:1s}
+        @keyframes twinkle{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
+        .subtitle{font-family:'Philosopher',sans-serif;font-size:1.3rem;color:var(--stardust-silver);font-weight:400;letter-spacing:2px;font-style:italic;text-shadow:0 0 15px rgba(192,192,192,.5)}
+        header::after{content:'⟡ ━━ ◆ ━━ ⟡';display:block;color:var(--mystic-gold);font-size:1rem;margin-top:20px;letter-spacing:4px}
+        .card{background:linear-gradient(145deg,rgba(26,0,51,.9) 0%,rgba(10,14,39,.95) 100%);border-radius:30px;padding:50px;box-shadow:0 0 60px rgba(157,78,221,.4),0 0 120px rgba(0,255,255,.2),inset 0 0 30px rgba(212,175,55,.1);margin-bottom:40px;animation:fadeInUp .8s ease-out .2s both;position:relative;border:2px solid rgba(212,175,55,.3)}
+        .card::before,.card::after{content:'';position:absolute;width:60px;height:60px;border:2px solid var(--mystic-gold);opacity:.6}
+        .card::before{top:20px;left:20px;border-right:none;border-bottom:none;border-top-left-radius:15px}
+        .card::after{bottom:20px;right:20px;border-left:none;border-top:none;border-bottom-right-radius:15px}
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+        .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-bottom:35px}
+        @media(max-width:768px){.form-grid{grid-template-columns:1fr}.card{padding:30px}h1::before,h1::after{display:none}}
+        .form-group{margin-bottom:35px;position:relative}
+        .form-group.full-width{grid-column:1/-1}
+        label{display:block;font-family:'Philosopher',sans-serif;font-weight:700;color:var(--mystic-gold);margin-bottom:12px;font-size:1.15rem;letter-spacing:1px;text-transform:uppercase;text-shadow:0 0 10px rgba(212,175,55,.5)}
+        .input-with-icon{position:relative}
+        .input-icon{position:absolute;left:20px;top:50%;transform:translateY(-50%);font-size:1.3rem;z-index:2;filter:drop-shadow(0 0 5px var(--quantum-cyan))}
+        input[type="text"],input[type="number"],select{width:100%;padding:18px 24px;border:2px solid rgba(212,175,55,.4);border-radius:16px;font-size:1.05rem;font-family:'Cormorant Garamond',serif;transition:all .4s cubic-bezier(.4,0,.2,1);background:rgba(26,0,51,.6);color:var(--ethereal-white);backdrop-filter:blur(10px)}
+        .input-with-icon input,.input-with-icon select{padding-left:55px}
+        input[type="text"]:focus,input[type="number"]:focus,select:focus{outline:none;border-color:var(--quantum-cyan);background:rgba(26,0,51,.8);box-shadow:0 0 20px rgba(0,255,255,.4),inset 0 0 10px rgba(0,255,255,.1);transform:translateY(-2px)}
+        select option{background:var(--cosmic-void);color:var(--ethereal-white)}
+        .duration-display{text-align:center;margin-bottom:15px;position:relative}
+        .duration-display::before{content:'⟡';position:absolute;left:50%;transform:translateX(-50%) translateY(-40px);font-size:2rem;color:var(--quantum-cyan);animation:pulse 2s ease-in-out infinite}
+        @keyframes pulse{0%,100%{opacity:.5;transform:translateX(-50%) translateY(-40px) scale(1)}50%{opacity:1;transform:translateX(-50%) translateY(-40px) scale(1.2)}}
+        .duration-value{font-size:3rem;font-weight:700;color:var(--quantum-cyan);font-family:'Cinzel',serif;text-shadow:0 0 20px rgba(0,255,255,.8)}
+        .duration-label{font-size:.9rem;color:var(--stardust-silver);text-transform:uppercase;letter-spacing:2px;font-family:'Philosopher',sans-serif}
+        input[type="range"]{width:100%;height:10px;border-radius:5px;background:linear-gradient(to right,var(--celestial-blue) 0%,var(--nebula-purple) 50%,var(--mystic-gold) 100%);outline:none;-webkit-appearance:none;margin:20px 0;box-shadow:0 0 20px rgba(157,78,221,.5)}
+        input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;border-radius:50%;background:radial-gradient(circle,var(--quantum-cyan) 0%,var(--celestial-blue) 100%);cursor:pointer;box-shadow:0 0 20px var(--quantum-cyan),0 4px 10px rgba(0,0,0,.5);transition:all .3s ease;border:2px solid var(--mystic-gold)}
+        input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.3);box-shadow:0 0 30px var(--quantum-cyan),0 6px 15px rgba(0,0,0,.7)}
+        input[type="range"]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:radial-gradient(circle,var(--quantum-cyan) 0%,var(--celestial-blue) 100%);cursor:pointer;box-shadow:0 0 20px var(--quantum-cyan),0 4px 10px rgba(0,0,0,.5);transition:all .3s ease;border:2px solid var(--mystic-gold)}
+        .topics-container{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+        .topic-tag{padding:12px 24px;background:linear-gradient(135deg,rgba(26,0,51,.8) 0%,rgba(45,27,105,.8) 100%);border:2px solid rgba(212,175,55,.5);border-radius:20px;cursor:pointer;transition:all .4s ease;font-weight:600;color:var(--stardust-silver);font-family:'Philosopher',sans-serif;letter-spacing:1px;position:relative;overflow:hidden}
+        .topic-tag::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(0,255,255,.3),transparent);transition:left .5s}
+        .topic-tag:hover::before{left:100%}
+        .topic-tag:hover{background:linear-gradient(135deg,rgba(157,78,221,.8) 0%,rgba(65,105,225,.8) 100%);color:white;transform:translateY(-3px) scale(1.05);box-shadow:0 8px 20px rgba(157,78,221,.5),0 0 30px rgba(0,255,255,.3);border-color:var(--quantum-cyan)}
+        .topic-tag.selected{background:linear-gradient(135deg,var(--nebula-purple) 0%,var(--celestial-blue) 100%);color:white;border-color:var(--quantum-cyan);box-shadow:0 0 25px rgba(0,255,255,.6),inset 0 0 15px rgba(255,255,255,.1)}
+        .topic-tag.selected::after{content:'✧';position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--quantum-cyan);font-size:1.2rem;animation:twinkle 1.5s ease-in-out infinite}
+        .custom-topic{display:flex;gap:10px;margin-top:15px}
+        .custom-topic input{flex:1}
+        .custom-topic button{padding:18px 30px;background:linear-gradient(135deg,var(--mystic-gold) 0%,var(--ancient-bronze) 100%);color:var(--cosmic-void);border:2px solid var(--mystic-gold);border-radius:12px;cursor:pointer;font-weight:700;font-family:'Philosopher',sans-serif;transition:all .4s ease;box-shadow:0 0 20px rgba(212,175,55,.4);text-transform:uppercase;letter-spacing:1px}
+        .custom-topic button:hover{background:linear-gradient(135deg,var(--quantum-cyan) 0%,var(--celestial-blue) 100%);color:white;transform:translateY(-2px);box-shadow:0 0 30px rgba(0,255,255,.6);border-color:var(--quantum-cyan)}
+        .generate-btn{width:100%;padding:25px;background:linear-gradient(135deg,var(--nebula-purple) 0%,var(--celestial-blue) 50%,var(--quantum-cyan) 100%);color:white;border:3px solid var(--mystic-gold);border-radius:20px;font-size:1.3rem;font-weight:700;font-family:'Cinzel',serif;cursor:pointer;transition:all .5s cubic-bezier(.4,0,.2,1);box-shadow:0 10px 40px rgba(157,78,221,.6),0 0 60px rgba(0,255,255,.4),inset 0 0 20px rgba(255,255,255,.1);text-transform:uppercase;letter-spacing:3px;position:relative;overflow:hidden}
+        .generate-btn::before{content:'';position:absolute;top:50%;left:50%;width:0;height:0;border-radius:50%;background:rgba(255,255,255,.3);transform:translate(-50%,-50%);transition:width .6s,height .6s}
+        .generate-btn:hover::before{width:600px;height:600px}
+        .generate-btn:hover:not(:disabled){transform:translateY(-5px) scale(1.02);box-shadow:0 15px 50px rgba(157,78,221,.8),0 0 80px rgba(0,255,255,.6),inset 0 0 30px rgba(255,255,255,.2);border-color:var(--quantum-cyan)}
+        .generate-btn:disabled{opacity:.5;cursor:not-allowed}
+        .loading{display:none;text-align:center;padding:80px}
+        .loading.active{display:block}
+        .spinner{width:80px;height:80px;border:4px solid transparent;border-top:4px solid var(--quantum-cyan);border-right:4px solid var(--nebula-purple);border-bottom:4px solid var(--mystic-gold);border-radius:50%;animation:quantumSpin 1.5s linear infinite;margin:0 auto 30px;position:relative;box-shadow:0 0 40px rgba(0,255,255,.6),inset 0 0 20px rgba(157,78,221,.4)}
+        .spinner::before{content:'';position:absolute;top:50%;left:50%;width:60%;height:60%;border:3px solid var(--celestial-blue);border-radius:50%;transform:translate(-50%,-50%);animation:quantumSpin 1s linear infinite reverse}
+        .spinner::after{content:'✧';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:2rem;color:var(--mystic-gold);animation:twinkle 1s ease-in-out infinite}
+        @keyframes quantumSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+        .loading h3{font-family:'Cinzel',serif;color:var(--quantum-cyan);font-size:1.8rem;margin-bottom:15px;text-shadow:0 0 20px rgba(0,255,255,.6)}
+        .loading p{color:var(--stardust-silver);font-size:1.2rem;font-style:italic}
+        .results{display:none;animation:fadeInUp .8s ease-out}
+        .results.active{display:block}
+        .result-header{background:linear-gradient(135deg,rgba(157,78,221,.9) 0%,rgba(65,105,225,.9) 50%,rgba(0,255,255,.8) 100%);padding:50px;border-radius:25px;margin-bottom:30px;position:relative;overflow:hidden;border:2px solid var(--mystic-gold);box-shadow:0 0 50px rgba(0,255,255,.5),inset 0 0 30px rgba(255,255,255,.1)}
+        .result-header::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(255,255,255,.05) 10px,rgba(255,255,255,.05) 20px);animation:shimmer 20s linear infinite}
+        @keyframes shimmer{0%{transform:translate(-50%,-50%) rotate(0deg)}100%{transform:translate(-50%,-50%) rotate(360deg)}}
+        .result-title{font-family:'Cinzel',serif;font-size:2.8rem;margin-bottom:25px;position:relative;z-index:1;text-shadow:0 0 20px rgba(0,0,0,.5)}
+        .result-meta{display:flex;gap:30px;flex-wrap:wrap;position:relative;z-index:1}
+        .meta-item{display:flex;align-items:center;gap:12px;background:rgba(10,14,39,.4);padding:12px 20px;border-radius:15px;border:1px solid rgba(212,175,55,.3);backdrop-filter:blur(10px)}
+        .meta-icon{font-size:1.8rem;filter:drop-shadow(0 0 10px var(--quantum-cyan))}
+        .lesson-content{background:linear-gradient(145deg,rgba(26,0,51,.95) 0%,rgba(10,14,39,.98) 100%);padding:50px;border-radius:25px;line-height:1.9;box-shadow:0 0 50px rgba(157,78,221,.3),inset 0 0 30px rgba(0,255,255,.1);border:2px solid rgba(212,175,55,.3);color:var(--ethereal-white);font-size:1.1rem}
+        .lesson-content h1,.lesson-content h2{font-family:'Cinzel',serif;color:var(--mystic-gold);margin-top:35px;margin-bottom:20px;font-size:2rem;text-shadow:0 0 15px rgba(212,175,55,.5);border-bottom:2px solid rgba(212,175,55,.3);padding-bottom:10px}
+        .lesson-content h3{font-family:'Philosopher',sans-serif;color:var(--quantum-cyan);margin-top:25px;margin-bottom:12px;font-size:1.5rem;text-shadow:0 0 10px rgba(0,255,255,.5)}
+        .lesson-content ul,.lesson-content ol{margin-left:35px;margin-bottom:20px}
+        .lesson-content li{margin-bottom:10px}
+        .lesson-content li::marker{color:var(--mystic-gold)}
+        .lesson-content code{background:rgba(0,255,255,.1);padding:3px 10px;border-radius:6px;font-family:'Courier New',monospace;color:var(--quantum-cyan);border:1px solid rgba(0,255,255,.3)}
+        .lesson-content pre{background:rgba(10,14,39,.8);padding:25px;border-radius:15px;overflow-x:auto;margin:20px 0;border:2px solid rgba(212,175,55,.3);box-shadow:inset 0 0 20px rgba(0,0,0,.5)}
+        .lesson-content strong{color:var(--mystic-gold);font-weight:700}
+        .lesson-content em{color:var(--nebula-purple);font-style:italic}
+        .action-buttons{display:flex;gap:15px;margin-top:35px;flex-wrap:wrap}
+        .action-btn{padding:16px 32px;border:2px solid var(--mystic-gold);background:linear-gradient(135deg,rgba(26,0,51,.8) 0%,rgba(45,27,105,.8) 100%);color:var(--mystic-gold);border-radius:15px;cursor:pointer;font-weight:600;font-family:'Philosopher',sans-serif;transition:all .4s ease;box-shadow:0 0 20px rgba(212,175,55,.3);text-transform:uppercase;letter-spacing:1px}
+        .action-btn:hover{background:linear-gradient(135deg,var(--nebula-purple) 0%,var(--celestial-blue) 100%);color:white;transform:translateY(-3px);box-shadow:0 0 30px rgba(0,255,255,.6);border-color:var(--quantum-cyan)}
+        .error-message{display:none;background:linear-gradient(135deg,rgba(220,38,38,.9) 0%,rgba(185,28,28,.9) 100%);color:white;padding:25px;border-radius:15px;margin-bottom:25px;font-weight:600;font-family:'Philosopher',sans-serif;border:2px solid rgba(255,100,100,.5);box-shadow:0 0 30px rgba(220,38,38,.5)}
+        .error-message.active{display:block;animation:shake .5s,pulse 2s ease-in-out infinite}
+        @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-15px)}75%{transform:translateX(15px)}}
+        .info-box{background:linear-gradient(135deg,rgba(244,232,208,.1) 0%,rgba(205,127,50,.1) 100%);border-left:5px solid var(--mystic-gold);border-right:5px solid var(--mystic-gold);padding:25px;border-radius:15px;margin-bottom:35px;position:relative;backdrop-filter:blur(10px);box-shadow:0 0 30px rgba(212,175,55,.2)}
+        .info-box::before,.info-box::after{content:'◆';position:absolute;color:var(--mystic-gold);font-size:1.5rem}
+        .info-box::before{top:10px;left:10px}
+        .info-box::after{bottom:10px;right:10px}
+        .info-box h3{font-family:'Cinzel',serif;color:var(--mystic-gold);margin-bottom:12px;font-size:1.3rem}
+        .info-box p{color:var(--stardust-silver);font-size:1.05rem;line-height:1.7}
+        ::-webkit-scrollbar{width:10px}
+        ::-webkit-scrollbar-track{background:var(--cosmic-void)}
+        ::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--nebula-purple) 0%,var(--celestial-blue) 100%);border-radius:5px;box-shadow:0 0 10px rgba(157,78,221,.5)}
+        ::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--quantum-cyan) 0%,var(--nebula-purple) 100%);box-shadow:0 0 10px var(--quantum-cyan)}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* ═══════════════════════════════════════════════════════
+           HOVER CARDS — Dynamic Content Reveal
+           ═══════════════════════════════════════════════════════ */
+        .hover-cards-section {
+            margin-bottom: 60px;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
         }
-
-        body {
-            font-family: 'Cormorant Garamond', serif;
-            background: var(--cosmic-void);
-            color: var(--ethereal-white);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Fond cosmique animé avec étoiles */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(2px 2px at 20% 30%, white, transparent),
-                radial-gradient(2px 2px at 60% 70%, white, transparent),
-                radial-gradient(1px 1px at 50% 50%, white, transparent),
-                radial-gradient(1px 1px at 80% 10%, white, transparent),
-                radial-gradient(2px 2px at 90% 60%, white, transparent),
-                radial-gradient(1px 1px at 33% 80%, white, transparent),
-                radial-gradient(1px 1px at 15% 60%, white, transparent),
-                var(--cosmic-gradient);
-            background-size: 200% 200%;
-            animation: cosmicDrift 60s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Effet de nébuleuse flottante */
-        body::after {
-            content: '';
-            position: fixed;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at 30% 40%, rgba(157, 78, 221, 0.2) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 60%, rgba(0, 255, 255, 0.15) 0%, transparent 50%);
-            animation: nebulaFloat 40s ease-in-out infinite alternate;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        @keyframes cosmicDrift {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); background-position: 0% 0%; }
-            50% { transform: translate(-10px, 10px) rotate(1deg); background-position: 100% 100%; }
-        }
-
-        @keyframes nebulaFloat {
-            0% { transform: translate(0, 0) rotate(0deg); opacity: 0.3; }
-            100% { transform: translate(-50px, 50px) rotate(5deg); opacity: 0.6; }
-        }
-
-        /* Particules quantiques flottantes */
-        .quantum-particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: var(--quantum-cyan);
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--quantum-cyan);
-            animation: particleFloat 15s infinite;
-        }
-
-        @keyframes particleFloat {
-            0% { transform: translateY(100vh) translateX(0) scale(0); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100px) translateX(100px) scale(1); opacity: 0; }
-        }
-
-        .container {
-            position: relative;
-            z-index: 10;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 60px 30px;
-        }
-
-        /* Header avec ornements médiévaux */
-        header {
+        .section-title {
             text-align: center;
-            margin-bottom: 80px;
-            animation: fadeInDown 0.8s ease-out;
-            position: relative;
-        }
-
-        /* Ornement supérieur */
-        header::before {
-            content: '✦ ━━━━━━━ ◈ ✧ ◈ ━━━━━━━ ✦';
-            display: block;
-            color: var(--mystic-gold);
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            letter-spacing: 3px;
-            text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1 {
             font-family: 'Cinzel', serif;
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--mystic-gold) 0%, var(--quantum-cyan) 50%, var(--nebula-purple) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 15px;
-            letter-spacing: 3px;
-            line-height: 1.2;
-            text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            font-size: 2rem;
+            color: var(--mystic-gold);
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px rgba(212,175,55,0.5);
             position: relative;
         }
-
-        /* Constellation autour du titre */
-        h1::before, h1::after {
-            content: '✧';
-            position: absolute;
-            font-size: 2rem;
+        .section-title::before,
+        .section-title::after {
+            content: '◈';
+            margin: 0 15px;
             color: var(--quantum-cyan);
             animation: twinkle 2s ease-in-out infinite;
         }
-
-        h1::before {
-            left: -50px;
-            top: 0;
-        }
-
-        h1::after {
-            right: -50px;
-            top: 0;
+        .section-title::after {
             animation-delay: 1s;
         }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.3); }
-        }
-
-        .subtitle {
-            font-family: 'Philosopher', sans-serif;
-            font-size: 1.3rem;
-            color: var(--stardust-silver);
-            font-weight: 400;
-            letter-spacing: 2px;
-            font-style: italic;
-            text-shadow: 0 0 15px rgba(192, 192, 192, 0.5);
-        }
-
-        /* Ornement inférieur */
-        header::after {
-            content: '⟡ ━━ ◆ ━━ ⟡';
-            display: block;
-            color: var(--mystic-gold);
-            font-size: 1rem;
-            margin-top: 20px;
-            letter-spacing: 4px;
-        }
-
-        /* Carte principale style grimoire */
-        .card {
-            background: linear-gradient(145deg, rgba(26, 0, 51, 0.9) 0%, rgba(10, 14, 39, 0.95) 100%);
-            border-radius: 30px;
-            padding: 50px;
-            box-shadow: 
-                0 0 60px rgba(157, 78, 221, 0.4),
-                0 0 120px rgba(0, 255, 255, 0.2),
-                inset 0 0 30px rgba(212, 175, 55, 0.1);
-            margin-bottom: 40px;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
-            position: relative;
-            border: 2px solid rgba(212, 175, 55, 0.3);
-        }
-
-        /* Coins ornementaux */
-        .card::before,
-        .card::after {
-            content: '';
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border: 2px solid var(--mystic-gold);
-            opacity: 0.6;
-        }
-
-        .card::before {
-            top: 20px;
-            left: 20px;
-            border-right: none;
-            border-bottom: none;
-            border-top-left-radius: 15px;
-        }
-
-        .card::after {
-            bottom: 20px;
-            right: 20px;
-            border-left: none;
-            border-top: none;
-            border-bottom-right-radius: 15px;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Form Grid */
-        .form-grid {
+        .hover-cards-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
-            margin-bottom: 35px;
+            perspective: 1200px;
         }
-
-        @media (max-width: 768px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            .card {
-                padding: 30px;
-            }
-            h1::before, h1::after {
-                display: none;
-            }
-        }
-
-        /* Form Styling */
-        .form-group {
-            margin-bottom: 35px;
+        .hover-card {
             position: relative;
-        }
-
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-
-        label {
-            display: block;
-            font-family: 'Philosopher', sans-serif;
-            font-weight: 700;
-            color: var(--mystic-gold);
-            margin-bottom: 12px;
-            font-size: 1.15rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-        }
-
-        .input-with-icon {
-            position: relative;
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 1.3rem;
-            z-index: 2;
-            filter: drop-shadow(0 0 5px var(--quantum-cyan));
-        }
-
-        input[type="text"],
-        input[type="number"],
-        select {
-            width: 100%;
-            padding: 18px 24px;
-            border: 2px solid rgba(212, 175, 55, 0.4);
-            border-radius: 16px;
-            font-size: 1.05rem;
-            font-family: 'Cormorant Garamond', serif;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            background: rgba(26, 0, 51, 0.6);
-            color: var(--ethereal-white);
-            backdrop-filter: blur(10px);
-        }
-
-        .input-with-icon input,
-        .input-with-icon select {
-            padding-left: 55px;
-        }
-
-        input[type="text"]:focus,
-        input[type="number"]:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--quantum-cyan);
-            background: rgba(26, 0, 51, 0.8);
-            box-shadow: 
-                0 0 20px rgba(0, 255, 255, 0.4),
-                inset 0 0 10px rgba(0, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
-
-        select option {
-            background: var(--cosmic-void);
-            color: var(--ethereal-white);
-        }
-
-        /* Duration Slider - Style alchimique */
-        .duration-display {
-            text-align: center;
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .duration-display::before {
-            content: '⟡';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%) translateY(-40px);
-            font-size: 2rem;
-            color: var(--quantum-cyan);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; transform: translateX(-50%) translateY(-40px) scale(1); }
-            50% { opacity: 1; transform: translateX(-50%) translateY(-40px) scale(1.2); }
-        }
-
-        .duration-value {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--quantum-cyan);
-            font-family: 'Cinzel', serif;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
-        }
-
-        .duration-label {
-            font-size: 0.9rem;
-            color: var(--stardust-silver);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-family: 'Philosopher', sans-serif;
-        }
-
-        input[type="range"] {
-            width: 100%;
-            height: 10px;
-            border-radius: 5px;
-            background: linear-gradient(to right, 
-                var(--celestial-blue) 0%, 
-                var(--nebula-purple) 50%, 
-                var(--mystic-gold) 100%);
-            outline: none;
-            -webkit-appearance: none;
-            margin: 20px 0;
-            box-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--quantum-cyan) 0%, var(--celestial-blue) 100%);
+            height: 380px;
             cursor: pointer;
-            box-shadow: 
-                0 0 20px var(--quantum-cyan),
-                0 4px 10px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-            border: 2px solid var(--mystic-gold);
+            transform-style: preserve-3d;
+            animation: cardEntry 0.6s ease-out both;
         }
-
-        input[type="range"]::-webkit-slider-thumb:hover {
-            transform: scale(1.3);
-            box-shadow: 
-                0 0 30px var(--quantum-cyan),
-                0 6px 15px rgba(0, 0, 0, 0.7);
+        .hover-card:nth-child(1) { animation-delay: 0.1s; }
+        .hover-card:nth-child(2) { animation-delay: 0.2s; }
+        .hover-card:nth-child(3) { animation-delay: 0.3s; }
+        .hover-card:nth-child(4) { animation-delay: 0.4s; }
+        .hover-card:nth-child(5) { animation-delay: 0.5s; }
+        .hover-card:nth-child(6) { animation-delay: 0.6s; }
+        @keyframes cardEntry {
+            from { opacity: 0; transform: translateY(40px) rotateX(10deg); }
+            to { opacity: 1; transform: translateY(0) rotateX(0); }
         }
-
-        input[type="range"]::-moz-range-thumb {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--quantum-cyan) 0%, var(--celestial-blue) 100%);
-            cursor: pointer;
-            box-shadow: 
-                0 0 20px var(--quantum-cyan),
-                0 4px 10px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-            border: 2px solid var(--mystic-gold);
+        .card-face {
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            backface-visibility: hidden;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            overflow: hidden;
         }
-
-        /* Topics Tags - Style runes mystiques */
-        .topics-container {
+        .card-front {
+            background: linear-gradient(145deg, rgba(26,0,51,0.95) 0%, rgba(10,14,39,0.98) 100%);
+            border: 2px solid rgba(212,175,55,0.3);
             display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .topic-tag {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, rgba(26, 0, 51, 0.8) 0%, rgba(45, 27, 105, 0.8) 100%);
-            border: 2px solid rgba(212, 175, 55, 0.5);
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            font-weight: 600;
-            color: var(--stardust-silver);
-            font-family: 'Philosopher', sans-serif;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .topic-tag::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .topic-tag:hover::before {
-            left: 100%;
-        }
-
-        .topic-tag:hover {
-            background: linear-gradient(135deg, rgba(157, 78, 221, 0.8) 0%, rgba(65, 105, 225, 0.8) 100%);
-            color: white;
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 
-                0 8px 20px rgba(157, 78, 221, 0.5),
-                0 0 30px rgba(0, 255, 255, 0.3);
-            border-color: var(--quantum-cyan);
-        }
-
-        .topic-tag.selected {
-            background: linear-gradient(135deg, var(--nebula-purple) 0%, var(--celestial-blue) 100%);
-            color: white;
-            border-color: var(--quantum-cyan);
-            box-shadow: 
-                0 0 25px rgba(0, 255, 255, 0.6),
-                inset 0 0 15px rgba(255, 255, 255, 0.1);
-        }
-
-        .topic-tag.selected::after {
-            content: '✧';
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--quantum-cyan);
-            font-size: 1.2rem;
-            animation: twinkle 1.5s ease-in-out infinite;
-        }
-
-        /* Custom Topic Input */
-        .custom-topic {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .custom-topic input {
-            flex: 1;
-        }
-
-        .custom-topic button {
-            padding: 18px 30px;
-            background: linear-gradient(135deg, var(--mystic-gold) 0%, var(--ancient-bronze) 100%);
-            color: var(--cosmic-void);
-            border: 2px solid var(--mystic-gold);
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 700;
-            font-family: 'Philosopher', sans-serif;
-            transition: all 0.4s ease;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .custom-topic button:hover {
-            background: linear-gradient(135deg, var(--quantum-cyan) 0%, var(--celestial-blue) 100%);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
-            border-color: var(--quantum-cyan);
-        }
-
-        /* Generate Button - Portal mystique */
-        .generate-btn {
-            width: 100%;
-            padding: 25px;
-            background: linear-gradient(135deg, var(--nebula-purple) 0%, var(--celestial-blue) 50%, var(--quantum-cyan) 100%);
-            color: white;
-            border: 3px solid var(--mystic-gold);
-            border-radius: 20px;
-            font-size: 1.3rem;
-            font-weight: 700;
-            font-family: 'Cinzel', serif;
-            cursor: pointer;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
-                0 10px 40px rgba(157, 78, 221, 0.6),
-                0 0 60px rgba(0, 255, 255, 0.4),
-                inset 0 0 20px rgba(255, 255, 255, 0.1);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .generate-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .generate-btn:hover::before {
-            width: 600px;
-            height: 600px;
-        }
-
-        .generate-btn:hover:not(:disabled) {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 
-                0 15px 50px rgba(157, 78, 221, 0.8),
-                0 0 80px rgba(0, 255, 255, 0.6),
-                inset 0 0 30px rgba(255, 255, 255, 0.2);
-            border-color: var(--quantum-cyan);
-        }
-
-        .generate-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Loading Animation - Portail quantique */
-        .loading {
-            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 30px;
             text-align: center;
-            padding: 80px;
+            box-shadow: 0 0 40px rgba(157,78,221,0.3), inset 0 0 20px rgba(0,255,255,0.05);
         }
-
-        .loading.active {
-            display: block;
-        }
-
-        .spinner {
-            width: 80px;
-            height: 80px;
-            border: 4px solid transparent;
-            border-top: 4px solid var(--quantum-cyan);
-            border-right: 4px solid var(--nebula-purple);
-            border-bottom: 4px solid var(--mystic-gold);
-            border-radius: 50%;
-            animation: quantumSpin 1.5s linear infinite;
-            margin: 0 auto 30px;
-            position: relative;
-            box-shadow: 
-                0 0 40px rgba(0, 255, 255, 0.6),
-                inset 0 0 20px rgba(157, 78, 221, 0.4);
-        }
-
-        .spinner::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 60%;
-            height: 60%;
-            border: 3px solid var(--celestial-blue);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            animation: quantumSpin 1s linear infinite reverse;
-        }
-
-        .spinner::after {
-            content: '✧';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2rem;
-            color: var(--mystic-gold);
-            animation: twinkle 1s ease-in-out infinite;
-        }
-
-        @keyframes quantumSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loading h3 {
-            font-family: 'Cinzel', serif;
-            color: var(--quantum-cyan);
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            text-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
-        }
-
-        .loading p {
-            color: var(--stardust-silver);
-            font-size: 1.2rem;
-            font-style: italic;
-        }
-
-        /* Results Section - Parchemin cosmique */
-        .results {
-            display: none;
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .results.active {
-            display: block;
-        }
-
-        .result-header {
-            background: linear-gradient(135deg, 
-                rgba(157, 78, 221, 0.9) 0%, 
-                rgba(65, 105, 225, 0.9) 50%, 
-                rgba(0, 255, 255, 0.8) 100%);
-            padding: 50px;
-            border-radius: 25px;
-            margin-bottom: 30px;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid var(--mystic-gold);
-            box-shadow: 
-                0 0 50px rgba(0, 255, 255, 0.5),
-                inset 0 0 30px rgba(255, 255, 255, 0.1);
-        }
-
-        .result-header::before {
+        .card-front::before {
             content: '';
             position: absolute;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 10px,
-                rgba(255, 255, 255, 0.05) 10px,
-                rgba(255, 255, 255, 0.05) 20px
-            );
-            animation: shimmer 20s linear infinite;
+            background: radial-gradient(circle at 30% 30%, rgba(0,255,255,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 70%, rgba(157,78,221,0.08) 0%, transparent 50%);
+            transition: transform 0.6s ease;
         }
-
-        @keyframes shimmer {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        .result-title {
-            font-family: 'Cinzel', serif;
-            font-size: 2.8rem;
-            margin-bottom: 25px;
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .result-meta {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(10, 14, 39, 0.4);
-            padding: 12px 20px;
-            border-radius: 15px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            backdrop-filter: blur(10px);
-        }
-
-        .meta-icon {
-            font-size: 1.8rem;
-            filter: drop-shadow(0 0 10px var(--quantum-cyan));
-        }
-
-        .lesson-content {
-            background: linear-gradient(145deg, 
-                rgba(26, 0, 51, 0.95) 0%, 
-                rgba(10, 14, 39, 0.98) 100%);
-            padding: 50px;
-            border-radius: 25px;
-            line-height: 1.9;
-            box-shadow: 
-                0 0 50px rgba(157, 78, 221, 0.3),
-                inset 0 0 30px rgba(0, 255, 255, 0.1);
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            color: var(--ethereal-white);
-            font-size: 1.1rem;
-        }
-
-        .lesson-content h1,
-        .lesson-content h2 {
-            font-family: 'Cinzel', serif;
-            color: var(--mystic-gold);
-            margin-top: 35px;
-            margin-bottom: 20px;
-            font-size: 2rem;
-            text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
-            border-bottom: 2px solid rgba(212, 175, 55, 0.3);
-            padding-bottom: 10px;
-        }
-
-        .lesson-content h3 {
-            font-family: 'Philosopher', sans-serif;
-            color: var(--quantum-cyan);
-            margin-top: 25px;
-            margin-bottom: 12px;
-            font-size: 1.5rem;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-        }
-
-        .lesson-content ul, .lesson-content ol {
-            margin-left: 35px;
-            margin-bottom: 20px;
-        }
-
-        .lesson-content li {
-            margin-bottom: 10px;
-            position: relative;
-        }
-
-        .lesson-content li::marker {
-            color: var(--mystic-gold);
-        }
-
-        .lesson-content code {
-            background: rgba(0, 255, 255, 0.1);
-            padding: 3px 10px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            color: var(--quantum-cyan);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-        }
-
-        .lesson-content pre {
-            background: rgba(10, 14, 39, 0.8);
-            padding: 25px;
-            border-radius: 15px;
-            overflow-x: auto;
-            margin: 20px 0;
-            border: 2px solid rgba(212, 175, 55, 0.3);
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .lesson-content strong {
-            color: var(--mystic-gold);
-            font-weight: 700;
-        }
-
-        .lesson-content em {
-            color: var(--nebula-purple);
-            font-style: italic;
-        }
-
-        /* Action Buttons - Sceaux mystiques */
-        .action-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 35px;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            padding: 16px 32px;
-            border: 2px solid var(--mystic-gold);
-            background: linear-gradient(135deg, rgba(26, 0, 51, 0.8) 0%, rgba(45, 27, 105, 0.8) 100%);
-            color: var(--mystic-gold);
-            border-radius: 15px;
-            cursor: pointer;
-            font-weight: 600;
-            font-family: 'Philosopher', sans-serif;
-            transition: all 0.4s ease;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .action-btn:hover {
-            background: linear-gradient(135deg, var(--nebula-purple) 0%, var(--celestial-blue) 100%);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+        .hover-card:hover .card-front {
+            transform: rotateY(180deg);
+            opacity: 0;
             border-color: var(--quantum-cyan);
+            box-shadow: 0 0 60px rgba(0,255,255,0.5), inset 0 0 30px rgba(0,255,255,0.1);
         }
-
-        /* Error Message - Portail d'alerte */
-        .error-message {
-            display: none;
-            background: linear-gradient(135deg, rgba(220, 38, 38, 0.9) 0%, rgba(185, 28, 28, 0.9) 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            font-weight: 600;
-            font-family: 'Philosopher', sans-serif;
-            border: 2px solid rgba(255, 100, 100, 0.5);
-            box-shadow: 0 0 30px rgba(220, 38, 38, 0.5);
+        .card-back {
+            background: linear-gradient(145deg, rgba(0,255,255,0.1) 0%, rgba(157,78,221,0.15) 50%, rgba(212,175,55,0.1) 100%);
+            border: 2px solid rgba(0,255,255,0.4);
+            transform: rotateY(-180deg);
+            display: flex;
+            flex-direction: column;
+            padding: 35px 30px;
+            box-shadow: 0 0 50px rgba(0,255,255,0.4), inset 0 0 25px rgba(157,78,221,0.1);
         }
-
-        .error-message.active {
-            display: block;
-            animation: shake 0.5s, pulse 2s ease-in-out infinite;
+        .hover-card:hover .card-back {
+            transform: rotateY(0deg);
+            border-color: var(--mystic-gold);
+            box-shadow: 0 0 80px rgba(212,175,55,0.5), 0 0 40px rgba(0,255,255,0.3), inset 0 0 30px rgba(212,175,55,0.1);
         }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-15px); }
-            75% { transform: translateX(15px); }
-        }
-
-        /* Info Box - Parchemin ancien */
-        .info-box {
-            background: linear-gradient(135deg, rgba(244, 232, 208, 0.1) 0%, rgba(205, 127, 50, 0.1) 100%);
-            border-left: 5px solid var(--mystic-gold);
-            border-right: 5px solid var(--mystic-gold);
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 35px;
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px var(--quantum-cyan));
+            transition: all 0.4s ease;
             position: relative;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+            z-index: 2;
         }
-
-        .info-box::before,
-        .info-box::after {
-            content: '◆';
-            position: absolute;
-            color: var(--mystic-gold);
-            font-size: 1.5rem;
+        .hover-card:hover .card-icon {
+            transform: scale(1.1) rotate(5deg);
+            filter: drop-shadow(0 0 25px var(--mystic-gold));
         }
-
-        .info-box::before {
-            top: 10px;
-            left: 10px;
-        }
-
-        .info-box::after {
-            bottom: 10px;
-            right: 10px;
-        }
-
-        .info-box h3 {
-            color: var(--quantum-cyan);
-            margin-bottom: 12px;
+        .card-title {
             font-family: 'Cinzel', serif;
             font-size: 1.4rem;
-            text-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            color: var(--mystic-gold);
+            margin-bottom: 12px;
+            text-shadow: 0 0 10px rgba(212,175,55,0.5);
+            position: relative;
+            z-index: 2;
         }
-
-        .info-box p {
+        .card-subtitle {
+            font-family: 'Philosopher', sans-serif;
             color: var(--stardust-silver);
-            line-height: 1.7;
-            font-size: 1.05rem;
+            font-size: 1rem;
+            font-style: italic;
+            position: relative;
+            z-index: 2;
         }
-
-        /* Scrollbar personnalisée */
-        ::-webkit-scrollbar {
-            width: 12px;
+        .card-back-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: var(--quantum-cyan);
+            margin-bottom: 15px;
+            text-shadow: 0 0 15px rgba(0,255,255,0.6);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-
-        ::-webkit-scrollbar-track {
-            background: var(--cosmic-void);
-            border-left: 1px solid rgba(212, 175, 55, 0.2);
+        .card-back-title::before {
+            content: '✧';
+            animation: twinkle 1.5s ease-in-out infinite;
         }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, var(--nebula-purple) 0%, var(--celestial-blue) 100%);
-            border-radius: 6px;
-            border: 2px solid var(--cosmic-void);
+        .card-back-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, var(--quantum-cyan) 0%, var(--nebula-purple) 100%);
-            box-shadow: 0 0 10px var(--quantum-cyan);
+        .card-back-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 14px;
+            background: rgba(10,14,39,0.6);
+            border-radius: 12px;
+            border-left: 3px solid var(--mystic-gold);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: none;
+        }
+        .hover-card:hover .card-back-item {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .hover-card:hover .card-back-item:nth-child(1) { animation: revealItem 0.4s ease-out 0.1s both; }
+        .hover-card:hover .card-back-item:nth-child(2) { animation: revealItem 0.4s ease-out 0.2s both; }
+        .hover-card:hover .card-back-item:nth-child(3) { animation: revealItem 0.4s ease-out 0.3s both; }
+        .hover-card:hover .card-back-item:nth-child(4) { animation: revealItem 0.4s ease-out 0.4s both; }
+        @keyframes revealItem {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .card-back-item:hover {
+            background: rgba(26,0,51,0.8);
+            border-left-color: var(--quantum-cyan);
+            box-shadow: 0 0 15px rgba(0,255,255,0.2);
+        }
+        .item-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            filter: drop-shadow(0 0 5px var(--quantum-cyan));
+        }
+        .item-text {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--ethereal-white);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .item-text strong {
+            color: var(--mystic-gold);
+            display: block;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+        .card-glow {
+            position: absolute;
+            inset: -2px;
+            border-radius: 26px;
+            background: linear-gradient(45deg, var(--quantum-cyan), var(--nebula-purple), var(--mystic-gold), var(--celestial-blue));
+            background-size: 300% 300%;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            animation: glowRotate 4s linear infinite;
+            filter: blur(8px);
+        }
+        .hover-card:hover .card-glow {
+            opacity: 0.7;
+        }
+        @keyframes glowRotate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .card-particles {
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .hover-card:hover .card-particles {
+            opacity: 1;
+        }
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--quantum-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--quantum-cyan);
+            animation: sparkleFloat 2s ease-in-out infinite;
+        }
+        .sparkle:nth-child(1) { top: 20%; left: 15%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 60%; left: 80%; animation-delay: 0.5s; }
+        .sparkle:nth-child(3) { top: 30%; left: 60%; animation-delay: 1s; }
+        .sparkle:nth-child(4) { top: 80%; left: 25%; animation-delay: 1.5s; }
+        .sparkle:nth-child(5) { top: 10%; left: 90%; animation-delay: 0.3s; }
+        @keyframes sparkleFloat {
+            0%, 100% { opacity: 0; transform: scale(0) translateY(0); }
+            50% { opacity: 1; transform: scale(1) translateY(-10px); }
+        }
+        @media (max-width: 768px) {
+            .hover-cards-grid { grid-template-columns: 1fr; }
+            .hover-card { height: 340px; }
+            .section-title { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Particules quantiques -->
     <div class="quantum-particles" id="particles"></div>
 
     <div class="container">
-        <!-- Header avec ornements astrologiques -->
         <header>
-            <h1>⟡ Grimoire Quantique ⟡</h1>
+            <h1>⟡ Arcan-Ai ⟡</h1>
             <p class="subtitle">« Les Arcanes de la Connaissance Transcendante »</p>
         </header>
 
-        <!-- Main Form Card - Style manuscrit ancien -->
+        <!-- ═══════════════════════════════════════════════════════
+             HOVER CARDS — Dynamic Content Reveal Section
+             ═══════════════════════════════════════════════════════ -->
+        <div class="hover-cards-section">
+            <h2 class="section-title">Les Arcanes Révélées</h2>
+            <div class="hover-cards-grid">
+
+                <!-- Card 1: Apprentissage Adaptatif -->
+                <div class="hover-card">
+                    <div class="card-glow"></div>
+                    <div class="card-particles">
+                        <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
+                    </div>
+                    <div class="card-face card-front">
+                        <div class="card-icon">🧠</div>
+                        <div class="card-title">Apprentissage Adaptatif</div>
+                        <div class="card-subtitle">L'intelligence qui s'adapte à votre essence</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="card-back-title">Votre Profil Cognitif</div>
+                        <div class="card-back-content">
+                            <div class="card-back-item">
+                                <span class="item-icon">🔮</span>
+                                <div class="item-text"><strong>Analyse en temps réel</strong>L'IA observe et s'adapte à votre rythme d'apprentissage unique</div>
+                            </div>
+                            <div class="card-back-item">
+                                <span class="item-icon">⚡</span>
+                                <div class="item-text"><strong>Niveau dynamique</strong>La difficulté s'ajuste automatiquement selon vos réponses</div>
+                            </div>
+                            <div class="card-back-item">
+                                <span class="item-icon">🎯</span>
+                                <div class="item-text"><strong>Focus personnalisé</strong>Concentration sur vos lacunes pour un progrès optimal</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: 4 Voies de Perception -->
+                <div class="hover-card">
+                    <div class="card-glow"></div>
+                    <div class="card-particles">
+                        <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
+                    </div>
+                    <div class="card-face card-front">
+                        <div class="card-icon">👁️</div>
+                        <div class="card-title">Voies de Perception</div>
+                        <div class="card-subtitle">Quatre chemins vers la connaissance</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="card-back-title">Choisissez Votre Voie</div>
+                        <div class="card-back-content">
+                            <div class="card-back-item">
+                                <span class="item-icon">✦</span>
+                                <div class="item-text"><strong>Voie du Visionnaire</strong>Apprentissage visuel avec schémas, diagrammes et cartes mentales</div>
+                            </div>
+                            <div class="card-back-item">
+                                <span class="item-icon">♫</span>
+                                <div class="item-text"><strong>Voie de l'Oracle</strong>Approche auditive avec explications narratives et discussions</div>
+                            </div>
+                            <div class="card-back-item">
+                                <span class="item-icon">⚡</span>
+                                <div class="item-text"><strong>Voie du Pratiquant</strong>Méthode kinesthésique par la pratique et les exercices</div>
+                            </div>
+                            <div class="card-back-item">
+                                <span class="item-icon">📖</span>
+                                <div class="item-text"><strong>Voie du Scribe</strong>Approche lecture/écriture avec notes structurées</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Domaines Infinis -->
+                <div class="hover-card">
+                    <div class="card-glow"></div>
+                    <div class="card-particles">
+                        <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
+                    </div>
+                    <div class="card-face card-front">
+                        <div class="card-icon">🌌</div>
+                        <div class="card-title">Domaines Infinis</div>
+                        <div class="card-subtitle">Toutes les disciplines, un seul portail</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="card-back-title">Univers du Savoir</div>
+                        <div class="card-back-content">
+                            <div class="card-back-item">
+                                <span class="item-icon">∑</span>
+                                <div class="item-text"><strong>Sciences Exactes</strong>Mathématiques, Physique, Chimie — les lois de l'univers</div>
+                            </div>
+                            <div class="card-back-item">
+                                <span class="item-icon">📜</span>
+                                <div class="item-text"><strong>Lettres & Langues</strong>Français, Anglais, Philosophie — l'art de la pensée</div>
+                            </div>
+                            <div class="card-back-item">
+                                <span class="item-icon">💻</span>
+                                <div class="item-text"><strong>Technologies</strong>Informatique, Programmation — forgez le futur</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Niveaux Initiatiques -->
+                <div class="hover-card">
+                    <div class="card-glow"></div>
+                    <div class="card-particles">
+                        <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
+                    </div>
+                    <div class="card-face card-front">
+                        <div class="card-icon">⚜️</div>
+                        <div class="card-title">Rangs Initiatiques</div>
+                        <div class="card-subtitle">Du Novice à l'Archimage</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="card-back-title">Votre Parcours</div>
+                        <div class="card-back-content">
+                            <div class="card-back-item">
+                                <span class="item-icon">🌱</span>
+                                <div class="item-text"><strong>Novice → Apprenti</strong>Fondations bienveillantes pour les jeunes esprits curieux</div>
+                            </div>
+                            <div class="card-back-item">
+                                <span class="item-icon">⚔️</span>
+                                <div class="item-text"><strong>Adepte → Maître</strong>Approfondissement et maîtrise des concepts avancés</div>
+                            </div>
+                            <div class="card-back-item">
+                                <span class="item-icon">👑</span>
+                                <div class="item-text"><strong>Grand Maître → Archimage</strong>Excellence universitaire et formation professionnelle</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Contenu Vivant -->
+                <div class="hover-card">
+                    <div class="card-glow"></div>
+                    <div class="card-particles">
+                        <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
+                    </div>
+                    <div class="card-face card-front">
+                        <div class="card-icon">✨</div>
+                        <div class="card-title">Contenu Vivant</div>
+                        <div class="card-subtitle">Des leçons qui prennent vie</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="card-back-title">Expérience Immersive</div>
+                        <div class="card-back-content">
+                            <div class="card-back-item">
+                                <span class="item-icon">📝</span>
+                                <div class="item-text"><strong>Markdown enrichi</strong>Code, formules, listes — formaté pour la clarté</div>
+                            </div>
+                            <div class="card-back-item">
+                                <span class="item-icon">🎨</span>
+                                <div class="item-text"><strong>Design mystique</strong>Interface cosmique qui stimule l'imagination</div>
+                            </div>
+                            <div class="card-back-item">
+                                <span class="item-icon">💾</span>
+                                <div class="item-text"><strong>Export facile</strong>Copiez, sauvegardez ou imprimez vos grimoires</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6: Invocation Quantique -->
+                <div class="hover-card">
+                    <div class="card-glow"></div>
+                    <div class="card-particles">
+                        <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
+                    </div>
+                    <div class="card-face card-front">
+                        <div class="card-icon">⚛️</div>
+                        <div class="card-title">Invocation Quantique</div>
+                        <div class="card-subtitle">L'IA au service de votre savoir</div>
+                    </div>
+                    <div class="card-face card-back">
+                        <div class="card-back-title">Puissance Cosmique</div>
+                        <div class="card-back-content">
+                            <div class="card-back-item">
+                                <span class="item-icon">🤖</span>
+                                <div class="item-text"><strong>Modèles avancés</strong>GPT cosmique pour une génération de haute qualité</div>
+                            </div>
+                            <div class="card-back-item">
+                                <span class="item-icon">⏱️</span>
+                                <div class="item-text"><strong>Durée flexible</strong>De 15 min à 3h — adaptez le rituel à votre temps</div>
+                            </div>
+                            <div class="card-back-item">
+                                <span class="item-icon">🎯</span>
+                                <div class="item-text"><strong>Thèmes ciblés</strong>Sélection multiple pour une leçon sur mesure</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
         <div class="card">
             <div class="info-box">
                 <h3>⟡ L'Alchimie de l'Apprentissage ⟡</h3>
@@ -972,7 +601,27 @@
                         <label for="subject">📜 Domaine de Sagesse</label>
                         <div class="input-with-icon">
                             <span class="input-icon">✧</span>
-                            <input type="text" id="subject" placeholder="Mathématiques, Philosophie, Alchimie..." required>
+                            <select id="subject" required>
+                                <option value="">Sélectionner un domaine</option>
+                                <option value="Mathématiques">∑ Mathématiques</option>
+                                <option value="Physique">⚛️ Physique</option>
+                                <option value="Chimie">🧪 Chimie</option>
+                                <option value="Biologie">🧬 Biologie</option>
+                                <option value="Sciences de la Terre">🌍 Sciences de la Terre</option>
+                                <option value="Informatique">💻 Informatique</option>
+                                <option value="Philosophie">📜 Philosophie</option>
+                                <option value="Histoire">🏛️ Histoire</option>
+                                <option value="Géographie">🗺️ Géographie</option>
+                                <option value="Français">📖 Français</option>
+                                <option value="Anglais">🇬🇧 Anglais</option>
+                                <option value="Espagnol">🇪🇸 Espagnol</option>
+                                <option value="Arts">🎨 Arts</option>
+                                <option value="Musique">🎵 Musique</option>
+                                <option value="Éducation physique">⚽ Éducation physique</option>
+                                <option value="Économie">💰 Économie</option>
+                                <option value="Sociologie">👥 Sociologie</option>
+                                <option value="Psychologie">🧠 Psychologie</option>
+                            </select>
                         </div>
                     </div>
 
@@ -1008,21 +657,19 @@
                         </div>
                     </div>
 
-                    <!-- Modèle IA -->
+                    <!-- Modèle IA — uniquement les modèles Cloud réels -->
                     <div class="form-group">
                         <label for="model">⚙️ Entité Mystique</label>
                         <div class="input-with-icon">
                             <span class="input-icon">⟡</span>
                             <select id="model">
-                                <option value="gpt-oss:120b-cloud">Esprit Cosmique GPT-120</option>
-                                <option value="llama2:7b">Gardien Llama</option>
-                                <option value="gemma:7b">Oracle Gemma</option>
+                                <option value="gpt-oss:120b-cloud">Esprit Cosmique GPT-120 (Cloud)</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <!-- Durée de la session -->
+                <!-- Durée -->
                 <div class="form-group full-width">
                     <label for="duration">⏳ Cycle Temporel de l'Invocation</label>
                     <div class="duration-display">
@@ -1032,12 +679,10 @@
                     <input type="range" id="duration" min="15" max="180" step="15" value="60">
                 </div>
 
-                <!-- Thèmes à couvrir -->
+                <!-- Thèmes -->
                 <div class="form-group full-width">
                     <label>✨ Arcanes à Explorer</label>
-                    <div id="topicsContainer" class="topics-container">
-                        <!-- Les thèmes seront ajoutés dynamiquement -->
-                    </div>
+                    <div id="topicsContainer" class="topics-container"></div>
                     <div class="custom-topic">
                         <input type="text" id="customTopic" placeholder="Inscrivez votre propre arcane...">
                         <button type="button" id="addTopicBtn">⊕ Ajouter</button>
@@ -1050,14 +695,14 @@
             </form>
         </div>
 
-        <!-- Loading State - Portail en activation -->
+        <!-- Loading -->
         <div id="loading" class="loading card">
             <div class="spinner"></div>
             <h3>⟡ Ouverture du Portail Quantique ⟡</h3>
             <p>Les Anciens tissent votre leçon dans les fibres de l'univers...</p>
         </div>
 
-        <!-- Results - Manifestation de la Connaissance -->
+        <!-- Résultats -->
         <div id="results" class="results">
             <div class="card">
                 <div class="result-header">
@@ -1065,39 +710,23 @@
                     <div class="result-meta">
                         <div class="meta-item">
                             <span class="meta-icon">📚</span>
-                            <div>
-                                <strong>Domaine:</strong>
-                                <div id="metaSubject"></div>
-                            </div>
+                            <div><strong>Domaine :</strong><div id="metaSubject"></div></div>
                         </div>
                         <div class="meta-item">
                             <span class="meta-icon">⏱️</span>
-                            <div>
-                                <strong>Cycle:</strong>
-                                <div id="metaDuration"></div>
-                            </div>
+                            <div><strong>Cycle :</strong><div id="metaDuration"></div></div>
                         </div>
                         <div class="meta-item">
                             <span class="meta-icon">🔮</span>
-                            <div>
-                                <strong>Voie:</strong>
-                                <div id="metaStyle"></div>
-                            </div>
+                            <div><strong>Voie :</strong><div id="metaStyle"></div></div>
                         </div>
                         <div class="meta-item">
                             <span class="meta-icon">✨</span>
-                            <div>
-                                <strong>Arcanes:</strong>
-                                <div id="metaTopics"></div>
-                            </div>
+                            <div><strong>Arcanes :</strong><div id="metaTopics"></div></div>
                         </div>
                     </div>
                 </div>
-
-                <div class="lesson-content" id="lessonContent">
-                    <!-- Le contenu de la leçon sera inséré ici -->
-                </div>
-
+                <div class="lesson-content" id="lessonContent"></div>
                 <div class="action-buttons">
                     <button class="action-btn" onclick="copyLesson()">📋 Copier</button>
                     <button class="action-btn" onclick="downloadLesson()">💾 Sauvegarder</button>
@@ -1108,244 +737,264 @@
     </div>
 
     <script>
-        // Créer des particules quantiques
-        function createParticles() {
+        // ── Particules ────────────────────────────────────────────
+        (function createParticles() {
             const container = document.getElementById('particles');
-            const particleCount = 30;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                container.appendChild(particle);
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDelay = Math.random() * 15 + 's';
+                p.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(p);
             }
-        }
-        
-        createParticles();
+        })();
 
-        // État de l'application
+        // ── État ─────────────────────────────────────────────────
         const state = {
             selectedTopics: new Set(),
-            currentLesson: ''
+            currentLesson:  ''
         };
 
-        // Thèmes prédéfinis par sujet avec noms mystiques
+        // ── Thèmes par sujet — matching souple (accents + alias) ──
         const topicsBySubject = {
-            'mathématiques': ['Algèbre des Sphères', 'Géométrie Sacrée', 'Analyse Transcendantale', 'Probabilités Cosmiques', 'Statistiques Ésotériques', 'Arithmétique Ancienne'],
-            'français': ['Grammaire des Anciens', 'Orthographe Runique', 'Conjugaison Temporelle', 'Littérature Mystique', 'Expression des Arcanes', 'Vocabulaire Alchimique'],
-            'sciences': ['Physique Quantique', 'Chimie Alchimique', 'Biologie Organique', 'Sciences Terrestres', 'Écologie Cosmique', 'Astronomie Stellaire'],
-            'histoire': ['Antiquité Légendaire', 'Ère Médiévale', 'Renaissance des Savoirs', 'Époque Moderne', 'Ère Contemporaine', 'Chroniques Locales'],
-            'géographie': ['Cartographie Mystique', 'Géographie Physique', 'Géographie Humaine', 'Géopolitique', 'Environnement Sacré', 'Mondialisation'],
-            'anglais': ['Grammaire Britannique', 'Vocabulaire Anglo-Saxon', 'Art de la Conversation', 'Compréhension Écrite', 'Expression Anglaise', 'Prononciation Raffinée'],
-            'philosophie': ['Métaphysique', 'Éthique des Sages', 'Logique Aristotélicienne', 'Épistémologie', 'Philosophie Politique', 'Esthétique'],
-            'informatique': ['Programmation Quantique', 'Algorithmique Mystique', 'Bases de Données', 'Réseaux Éthérés', 'Sécurité Cryptique', 'Web Cosmique'],
-            'physique': ['Mécanique Céleste', 'Électricité Stellaire', 'Optique Lumineuse', 'Thermodynamique', 'Physique Quantique', 'Relativité Einsteinienne'],
-            'chimie': ['Chimie Organique', 'Chimie Minérale', 'Thermochimie', 'Cinétique Alchimique', 'Électrochimie', 'Chimie Analytique']
+            // Mathématiques
+            'mathématiques':  ['Algèbre des Sphères', 'Géométrie Sacrée', 'Analyse Transcendantale', 'Probabilités Cosmiques', 'Statistiques Ésotériques', 'Arithmétique Ancienne'],
+            'mathematiques':  null, // alias → mathématiques
+            'maths':          null,
+            'math':           null,
+
+            // Français
+            'français':       ['Grammaire des Anciens', 'Orthographe Runique', 'Conjugaison Temporelle', 'Littérature Mystique', 'Expression des Arcanes', 'Vocabulaire Alchimique'],
+            'francais':       null,
+            'lettres':        null,
+
+            // Sciences
+            'sciences':       ['Physique Quantique', 'Chimie Alchimique', 'Biologie Organique', 'Sciences Terrestres', 'Écologie Cosmique', 'Astronomie Stellaire'],
+            'svt':            null, // alias → sciences
+            'science':        null,
+
+            // Histoire
+            'histoire':       ['Antiquité Légendaire', 'Ère Médiévale', 'Renaissance des Savoirs', 'Époque Moderne', 'Ère Contemporaine', 'Chroniques Locales'],
+            'histoire-géo':   null,
+            'histoire-geo':   null,
+
+            // Géographie
+            'géographie':     ['Cartographie Mystique', 'Géographie Physique', 'Géographie Humaine', 'Géopolitique', 'Environnement Sacré', 'Mondialisation'],
+            'geographie':     null,
+            'geo':            null,
+            'géo':            null,
+
+            // Anglais
+            'anglais':        ['Grammaire Britannique', 'Vocabulaire Anglo-Saxon', 'Art de la Conversation', 'Compréhension Écrite', 'Expression Anglaise', 'Prononciation Raffinée'],
+            'english':        null,
+
+            // Philosophie
+            'philosophie':    ['Métaphysique', 'Éthique des Sages', 'Logique Aristotélicienne', 'Épistémologie', 'Philosophie Politique', 'Esthétique'],
+            'philo':          null,
+
+            // Informatique
+            'informatique':   ['Programmation Quantique', 'Algorithmique Mystique', 'Bases de Données', 'Réseaux Éthérés', 'Sécurité Cryptique', 'Web Cosmique'],
+            'info':           null,
+            'programmation':  null,
+            'code':           null,
+
+            // Physique
+            'physique':       ['Mécanique Céleste', 'Électricité Stellaire', 'Optique Lumineuse', 'Thermodynamique', 'Physique Quantique', 'Relativité Einsteinienne'],
+            'physique-chimie':null,
+
+            // Chimie
+            'chimie':         ['Chimie Organique', 'Chimie Minérale', 'Thermochimie', 'Cinétique Alchimique', 'Électrochimie', 'Chimie Analytique'],
+            'alchimie':       null,
+
+            // Biologie
+            'biologie':       ['Cellule Vivante', 'Genetique', 'Écosystèmes', 'Corps Humain', 'Evolution', 'Microbiologie'],
+            'bio':            null,
+
+            // Économie
+            'économie':       ['Microéconomie', 'Macroéconomie', 'Finance', 'Marchés', 'Commerce International', 'Politique Économique'],
+            'economie':       null,
+            'eco':            null,
+            'ses':            null,
+
+            // Arts
+            'arts':           ['Histoire de l\'Art', 'Dessin', 'Peinture', 'Sculpture', 'Art Numérique', 'Design'],
+            'art':            null,
+
+            // Musique
+            'musique':        ['Solfège', 'Harmonie', 'Histoire de la Musique', 'Instruments', 'Composition', 'Musique du Monde'],
         };
 
-        // Éléments DOM
-        const form = document.getElementById('tutorForm');
-        const generateBtn = document.getElementById('generateBtn');
-        const loading = document.getElementById('loading');
-        const results = document.getElementById('results');
-        const errorMsg = document.getElementById('errorMsg');
-        const topicsContainer = document.getElementById('topicsContainer');
+        // Résout les alias (valeur null pointe vers une clé parent)
+        const aliasMap = {
+            'mathematiques':'mathématiques', 'maths':'mathématiques', 'math':'mathématiques',
+            'francais':'français', 'lettres':'français',
+            'svt':'sciences', 'science':'sciences',
+            'histoire-géo':'histoire', 'histoire-geo':'histoire',
+            'geographie':'géographie', 'geo':'géographie', 'géo':'géographie',
+            'english':'anglais',
+            'philo':'philosophie',
+            'info':'informatique', 'programmation':'informatique', 'code':'informatique',
+            'physique-chimie':'physique',
+            'alchimie':'chimie',
+            'bio':'biologie',
+            'economie':'économie', 'eco':'économie', 'ses':'économie',
+            'art':'arts',
+        };
+
+        const DEFAULT_TOPICS = ['Fondements Primordiaux', 'Théorie Cosmique', 'Pratique Mystique', 'Exercices des Anciens', 'Applications Universelles'];
+
+        function getTopicsFor(raw) {
+            const key = raw.trim().toLowerCase();
+            const resolved = aliasMap[key] || key;
+            return topicsBySubject[resolved] || null;
+        }
+
+        // ── Éléments DOM ─────────────────────────────────────────
+        const form             = document.getElementById('tutorForm');
+        const generateBtn      = document.getElementById('generateBtn');
+        const loading          = document.getElementById('loading');
+        const results          = document.getElementById('results');
+        const errorMsg         = document.getElementById('errorMsg');
+        const topicsContainer  = document.getElementById('topicsContainer');
         const customTopicInput = document.getElementById('customTopic');
-        const addTopicBtn = document.getElementById('addTopicBtn');
-        const durationSlider = document.getElementById('duration');
-        const durationDisplay = document.getElementById('durationDisplay');
-        const subjectInput = document.getElementById('subject');
+        const addTopicBtn      = document.getElementById('addTopicBtn');
+        const durationSlider   = document.getElementById('duration');
+        const durationDisplay  = document.getElementById('durationDisplay');
+        const subjectInput     = document.getElementById('subject');
 
-        // Mise à jour de la durée en temps réel
-        durationSlider.addEventListener('input', (e) => {
-            const value = parseInt(e.target.value);
-            durationDisplay.textContent = `${value} min`;
+        // Durée en temps réel
+        durationSlider.addEventListener('input', e => {
+            durationDisplay.textContent = `${e.target.value} min`;
         });
 
-        // Mettre à jour les thèmes selon le sujet
-        subjectInput.addEventListener('blur', () => {
-            updateTopics();
+        // Mise à jour des thèmes au blur ET à la saisie (avec debounce)
+        let debounceTimer;
+        subjectInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(updateTopics, 400);
         });
+        subjectInput.addEventListener('blur', updateTopics);
 
         function updateTopics() {
-            const subject = subjectInput.value.trim().toLowerCase();
-            let topics = topicsBySubject[subject] || ['Fondements Primordiaux', 'Théorie Cosmique', 'Pratique Mystique', 'Exercices des Anciens', 'Applications Universelles'];
-            
+            const raw    = subjectInput.value;
+            const topics = raw ? (getTopicsFor(raw) || DEFAULT_TOPICS) : DEFAULT_TOPICS;
+
             topicsContainer.innerHTML = '';
             state.selectedTopics.clear();
-            
+
             topics.forEach(topic => {
                 const tag = document.createElement('div');
-                tag.className = 'topic-tag';
+                tag.className     = 'topic-tag';
                 tag.dataset.topic = topic;
-                tag.textContent = topic;
+                tag.textContent   = topic;
                 topicsContainer.appendChild(tag);
             });
         }
 
-        // Initialiser avec des thèmes par défaut
         updateTopics();
 
-        // Gestion des tags de thèmes
-        topicsContainer.addEventListener('click', (e) => {
-            if (e.target.classList.contains('topic-tag')) {
-                const topic = e.target.dataset.topic;
-                e.target.classList.toggle('selected');
-                
-                if (state.selectedTopics.has(topic)) {
-                    state.selectedTopics.delete(topic);
-                } else {
-                    state.selectedTopics.add(topic);
-                }
-            }
+        // Sélection des thèmes
+        topicsContainer.addEventListener('click', e => {
+            if (!e.target.classList.contains('topic-tag')) return;
+            const topic = e.target.dataset.topic;
+            e.target.classList.toggle('selected');
+            state.selectedTopics.has(topic)
+                ? state.selectedTopics.delete(topic)
+                : state.selectedTopics.add(topic);
         });
 
-        // Ajouter un thème personnalisé
-        addTopicBtn.addEventListener('click', () => {
-            const customTopic = customTopicInput.value.trim();
-            if (customTopic) {
-                const tag = document.createElement('div');
-                tag.className = 'topic-tag selected';
-                tag.dataset.topic = customTopic;
-                tag.textContent = `✧ ${customTopic}`;
-                topicsContainer.appendChild(tag);
-                
-                state.selectedTopics.add(customTopic);
-                customTopicInput.value = '';
-            }
+        // Thème personnalisé
+        addTopicBtn.addEventListener('click', addCustomTopic);
+        customTopicInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter') { e.preventDefault(); addCustomTopic(); }
         });
 
-        // Permettre d'ajouter avec Enter
-        customTopicInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                addTopicBtn.click();
-            }
-        });
+        function addCustomTopic() {
+            const val = customTopicInput.value.trim();
+            if (!val) return;
+            const tag = document.createElement('div');
+            tag.className     = 'topic-tag selected';
+            tag.dataset.topic = val;
+            tag.textContent   = `✧ ${val}`;
+            topicsContainer.appendChild(tag);
+            state.selectedTopics.add(val);
+            customTopicInput.value = '';
+        }
 
-        // Soumettre le formulaire
-        form.addEventListener('submit', async (e) => {
+        // ── Soumission ────────────────────────────────────────────
+        form.addEventListener('submit', async e => {
             e.preventDefault();
-            
-            // Récupérer les données
-            const subject = document.getElementById('subject').value.trim();
-            const level = document.getElementById('level').value;
+
+            const subject       = subjectInput.value.trim();
+            const level         = document.getElementById('level').value;
             const learningStyle = document.getElementById('learningStyle').value;
-            const duration = parseInt(durationSlider.value);
-            const model = document.getElementById('model').value;
-            const topics = Array.from(state.selectedTopics);
+            const duration      = parseInt(durationSlider.value);
+            const model         = document.getElementById('model').value;
+            const topics        = Array.from(state.selectedTopics);
 
-            // Validation
-            if (!subject) {
-                showError('⚠️ Veuillez invoquer un domaine de sagesse');
-                return;
-            }
+            if (!subject)       { showError('⚠️ Veuillez invoquer un domaine de sagesse'); return; }
+            if (!level)         { showError('⚠️ Veuillez choisir votre rang d\'initié'); return; }
+            if (!learningStyle) { showError('⚠️ Veuillez sélectionner votre voie de perception'); return; }
+            if (topics.length === 0) { showError('⚠️ Veuillez sélectionner au moins un arcane à explorer'); return; }
 
-            if (!level) {
-                showError('⚠️ Veuillez choisir votre rang d\'initié');
-                return;
-            }
-
-            if (!learningStyle) {
-                showError('⚠️ Veuillez sélectionner votre voie de perception');
-                return;
-            }
-
-            if (topics.length === 0) {
-                showError('⚠️ Veuillez sélectionner au moins un arcane à explorer');
-                return;
-            }
-
-            // Afficher le loading
             hideError();
             results.classList.remove('active');
             loading.classList.add('active');
             generateBtn.disabled = true;
 
             try {
-                // Appeler l'API
                 const response = await fetch('/api/generate', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        subject,
-                        level,
-                        learning_style: learningStyle,
-                        topics,
-                        duration,
-                        model
-                    })
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ subject, level, learning_style: learningStyle, topics, duration, model })
                 });
-
                 const data = await response.json();
-
-                if (data.success) {
-                    displayResults(data);
-                } else {
-                    showError('⚠️ ' + (data.error || 'Les forces cosmiques sont perturbées'));
-                }
-            } catch (error) {
+                data.success ? displayResults(data) : showError('⚠️ ' + (data.error || 'Les forces cosmiques sont perturbées'));
+            } catch (err) {
                 showError('⚠️ Le portail est inaccessible. Vérifiez que le serveur mystique est actif.');
-                console.error('Erreur:', error);
+                console.error(err);
             } finally {
                 loading.classList.remove('active');
                 generateBtn.disabled = false;
             }
         });
 
-        // Afficher les résultats avec style
+        // ── Affichage des résultats ───────────────────────────────
         function displayResults(data) {
             state.currentLesson = data.lesson;
-            
-            document.getElementById('resultTitle').textContent = `⟡ ${data.subject} - Grimoire Révélé ⟡`;
-            document.getElementById('metaSubject').textContent = data.subject;
-            document.getElementById('metaDuration').textContent = `${data.duration} minutes`;
-            document.getElementById('metaStyle').textContent = data.learning_style;
-            document.getElementById('metaTopics').textContent = data.topics.slice(0, 2).join(', ') + (data.topics.length > 2 ? '...' : '');
-            
-            // Formatter la leçon avec Markdown
-            const formatted = marked.parse(data.lesson);
-            document.getElementById('lessonContent').innerHTML = formatted;
-            
+            document.getElementById('resultTitle').textContent   = `⟡ ${data.subject} — Grimoire Révélé ⟡`;
+            document.getElementById('metaSubject').textContent   = data.subject;
+            document.getElementById('metaDuration').textContent  = `${data.duration} minutes`;
+            document.getElementById('metaStyle').textContent     = data.learning_style;
+            document.getElementById('metaTopics').textContent    = data.topics.slice(0, 2).join(', ') + (data.topics.length > 2 ? '…' : '');
+            document.getElementById('lessonContent').innerHTML   = marked.parse(data.lesson);
             results.classList.add('active');
             results.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
-        // Copier la leçon
+        // ── Actions ───────────────────────────────────────────────
         function copyLesson() {
-            navigator.clipboard.writeText(state.currentLesson).then(() => {
-                alert('✨ Le grimoire a été copié dans les archives éthérées !');
-            });
+            navigator.clipboard.writeText(state.currentLesson)
+                .then(() => alert('✨ Le grimoire a été copié dans les archives éthérées !'));
         }
 
-        // Télécharger la leçon
         function downloadLesson() {
             const blob = new Blob([state.currentLesson], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `grimoire-${document.getElementById('subject').value}.txt`;
+            const url  = URL.createObjectURL(blob);
+            const a    = document.createElement('a');
+            a.href     = url;
+            a.download = `arcan-ai-${subjectInput.value || 'lecon'}.txt`;
             a.click();
             URL.revokeObjectURL(url);
         }
 
-        // Afficher une erreur
-        function showError(message) {
-            errorMsg.textContent = message;
+        function showError(msg) {
+            errorMsg.textContent = msg;
             errorMsg.classList.add('active');
-            setTimeout(() => {
-                hideError();
-            }, 5000);
+            setTimeout(hideError, 5000);
         }
-
-        // Masquer l'erreur
-        function hideError() {
-            errorMsg.classList.remove('active');
-        }
+        function hideError() { errorMsg.classList.remove('active'); }
     </script>
 </body>
 </html>
