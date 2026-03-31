@@ -16,3 +16,4 @@ Thumbs.db
 .env
 arcan-ai.log
 *.log
+.env.example
