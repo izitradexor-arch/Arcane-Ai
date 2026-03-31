@@ -15,25 +15,25 @@
     ═══════════════════════════════════════ */
     :root {
       /* Fonds — hiérarchie claire */
-      --bg-void:    #0d0f1a;   /* page */
-      --bg-card:    #131623;   /* cards */
-      --bg-raised:  #1a1e32;   /* inputs, tags */
-      --bg-hover:   #222743;   /* hover states */
-      --bg-result:  #0f1120;   /* zone résultat */
+      --bg-void:    #0d0f1a;
+      --bg-card:    #131623;
+      --bg-raised:  #1a1e32;
+      --bg-hover:   #222743;
+      --bg-result:  #0f1120;
 
       /* Textes — tous ≥ 4.5:1 sur --bg-card */
-      --text-primary:   #f0ead8;  /* 14.2:1 */
-      --text-secondary: #b8a98a;  /* 5.8:1  */
-      --text-muted:     #786d5a;  /* 3.0:1 — uniquement pour labels décoratifs */
+      --text-primary:   #f0ead8;
+      --text-secondary: #b8a98a;
+      --text-muted:     #786d5a;
 
       /* Accents */
-      --gold:       #b8965a;   /* or atténué — moins agressif que #d4af37 */
-      --gold-light: #d4ae72;   /* hover */
+      --gold:       #b8965a;
+      --gold-light: #d4ae72;
       --gold-glow:  rgba(184,150,90,.18);
-      --slate:      #5b8fa8;   /* bleu-ardoise — remplace cyan éblouissant */
+      --slate:      #5b8fa8;
       --slate-light:#7aafc8;
       --slate-glow: rgba(91,143,168,.18);
-      --violet:     #7c6aaa;   /* accent violet discret */
+      --violet:     #7c6aaa;
 
       /* Bordures */
       --border:       rgba(184,150,90,.18);
@@ -75,7 +75,7 @@
       overflow-x: hidden;
     }
 
-    /* Fond étoilé — subtil, pas de rotation */
+    /* Fond étoilé — subtil */
     body::before {
       content: '';
       position: fixed;
@@ -93,7 +93,7 @@
       z-index: 0;
     }
 
-    /* Nébuleuse douce — statique (moins de distraction) */
+    /* Nébuleuse douce — statique */
     body::after {
       content: '';
       position: fixed;
@@ -107,7 +107,7 @@
     }
 
     /* ═══════════════════════════════════════
-       ANIMATIONS (réduites si demandé)
+       ANIMATIONS
     ═══════════════════════════════════════ */
     @keyframes fadeUp   { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
     @keyframes fadeDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
@@ -125,7 +125,7 @@
     .container {
       position: relative;
       z-index: 10;
-      max-width: 1100px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 3rem 1.5rem 4rem;
     }
@@ -161,7 +161,6 @@
       display: inline-block;
     }
 
-    /* Underline doré au lieu du gradient éblouissant */
     h1::after {
       content: '';
       position: absolute;
@@ -183,7 +182,7 @@
     }
 
     /* ═══════════════════════════════════════
-       FEATURE CARDS — flip 3D
+       FEATURE CARDS — flip 3D avec alignement corrigé
     ═══════════════════════════════════════ */
     .features-section {
       margin-bottom: 2.5rem;
@@ -202,21 +201,22 @@
 
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
     }
 
-    @media (max-width: 900px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 560px) { .features-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
 
     /* Conteneur avec perspective */
     .flip-wrap {
-      perspective: 900px;
-      height: 220px;
+      perspective: 1000px;
+      height: 280px;
+      cursor: pointer;
     }
-
-    @media (max-width: 900px) { .flip-wrap { height: 240px; } }
-    @media (max-width: 560px) { .flip-wrap { height: 200px; } }
 
     /* Plateau qui tourne */
     .flip-inner {
@@ -224,11 +224,11 @@
       width: 100%;
       height: 100%;
       transform-style: preserve-3d;
-      transition: transform .65s cubic-bezier(.4,0,.2,1);
+      transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
     }
 
     .flip-wrap:hover .flip-inner,
-    .flip-wrap:focus-within .flip-inner {
+    .flip-wrap.flipped .flip-inner {
       transform: rotateY(180deg);
     }
 
@@ -241,19 +241,35 @@
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       border: 1px solid var(--border);
-      overflow: hidden;
+      overflow-y: auto;
+      padding: 1.5rem;
     }
 
-    /* Avant — icône + titre + sous-titre */
+    /* Personnalisation de la scrollbar pour les faces */
+    .flip-front::-webkit-scrollbar,
+    .flip-back::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .flip-front::-webkit-scrollbar-track {
+      background: var(--bg-void);
+      border-radius: 2px;
+    }
+
+    .flip-front::-webkit-scrollbar-thumb {
+      background: var(--gold);
+      border-radius: 2px;
+    }
+
+    /* Avant — contenu centré verticalement */
     .flip-front {
       background: var(--bg-card);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 1.5rem 1.25rem;
       text-align: center;
-      gap: .6rem;
+      gap: 0.8rem;
       transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
     }
 
@@ -266,18 +282,19 @@
     .flip-front::before {
       content: '';
       position: absolute;
-      top: 30%;
+      top: 25%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 70px;
-      height: 70px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       background: radial-gradient(circle, var(--gold-glow) 0%, transparent 70%);
       pointer-events: none;
+      opacity: 0.6;
     }
 
     .feature-icon {
-      font-size: 2rem;
+      font-size: 2.5rem;
       line-height: 1;
       position: relative;
       z-index: 1;
@@ -285,43 +302,50 @@
       transition: transform .3s var(--ease);
     }
 
-    .flip-wrap:hover .feature-icon { transform: scale(1.12) rotate(-4deg); }
+    .flip-wrap:hover .feature-icon {
+      transform: scale(1.1) rotate(-4deg);
+    }
 
     .feature-title {
       font-family: 'Cinzel', serif;
-      font-size: .88rem;
+      font-size: 1.1rem;
+      font-weight: 600;
       color: var(--gold);
       letter-spacing: .07em;
       position: relative;
       z-index: 1;
+      margin-top: 0.5rem;
     }
 
     .feature-desc {
-      font-size: .88rem;
+      font-size: 0.9rem;
       color: var(--text-secondary);
       font-style: italic;
-      line-height: 1.45;
+      line-height: 1.5;
       position: relative;
       z-index: 1;
+      max-width: 90%;
     }
 
     /* Indicateur de flip */
     .flip-hint {
       position: absolute;
-      bottom: .6rem;
-      right: .75rem;
-      font-size: .65rem;
+      bottom: 0.8rem;
+      right: 1rem;
+      font-size: 0.7rem;
       color: var(--text-muted);
       font-family: 'DM Sans', sans-serif;
       letter-spacing: .04em;
       display: flex;
       align-items: center;
       gap: .25rem;
-      opacity: .7;
+      opacity: .6;
       transition: opacity .3s;
     }
 
-    .flip-wrap:hover .flip-hint { opacity: 0; }
+    .flip-wrap:hover .flip-hint {
+      opacity: 0;
+    }
 
     /* Arrière — contenu détaillé */
     .flip-back {
@@ -329,19 +353,20 @@
       transform: rotateY(180deg);
       display: flex;
       flex-direction: column;
-      padding: 1.1rem 1.25rem;
       border-color: var(--slate);
     }
 
     .flip-back-title {
       font-family: 'Cinzel', serif;
-      font-size: .82rem;
+      font-size: 0.9rem;
       color: var(--slate-light);
       letter-spacing: .1em;
-      margin-bottom: .75rem;
+      margin-bottom: 1rem;
       display: flex;
       align-items: center;
       gap: .4rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
     }
 
     .flip-back-title::before {
@@ -353,50 +378,46 @@
     .flip-back-items {
       display: flex;
       flex-direction: column;
-      gap: .5rem;
+      gap: 0.75rem;
       flex: 1;
-      justify-content: center;
     }
 
     .flip-back-item {
       display: flex;
       align-items: flex-start;
-      gap: .55rem;
-      padding: .45rem .6rem;
-      background: rgba(13,15,26,.45);
+      gap: 0.7rem;
+      padding: 0.6rem 0.8rem;
+      background: rgba(13,15,26,.5);
       border-radius: var(--r-sm);
       border-left: 2px solid var(--gold);
-      animation: flipItemIn .35s var(--ease) both;
+      transition: transform 0.2s ease, background 0.2s ease;
     }
 
-    @keyframes flipItemIn {
-      from { opacity: 0; transform: translateX(-8px); }
-      to   { opacity: 1; transform: translateX(0); }
+    .flip-back-item:hover {
+      background: rgba(13,15,26,.7);
+      transform: translateX(4px);
     }
-
-    .flip-back-item:nth-child(1) { animation-delay: .05s; }
-    .flip-back-item:nth-child(2) { animation-delay: .12s; }
-    .flip-back-item:nth-child(3) { animation-delay: .19s; }
-    .flip-back-item:nth-child(4) { animation-delay: .26s; }
 
     .flip-back-item-icon {
       flex-shrink: 0;
-      font-size: .85rem;
-      margin-top: .05rem;
+      font-size: 1rem;
+      margin-top: 0.1rem;
     }
 
     .flip-back-item-text {
       font-family: 'DM Sans', sans-serif;
-      font-size: .8rem;
+      font-size: 0.85rem;
       color: var(--text-secondary);
       line-height: 1.4;
+      flex: 1;
     }
 
     .flip-back-item-text strong {
       color: var(--text-primary);
-      font-weight: 500;
+      font-weight: 600;
       display: block;
-      font-size: .78rem;
+      font-size: 0.85rem;
+      margin-bottom: 0.2rem;
     }
 
     /* ═══════════════════════════════════════
@@ -501,7 +522,7 @@
     select,
     input[type="text"] {
       width: 100%;
-      min-height: 48px; /* taille tactile ≥44px */
+      min-height: 48px;
       padding: .7rem 1rem .7rem 2.6rem;
       background: var(--bg-raised);
       border: 1px solid var(--border);
@@ -531,7 +552,6 @@
 
     select option { background: var(--bg-card); color: var(--text-primary); }
 
-    /* Flèche select personnalisée */
     .select-arrow {
       position: absolute;
       right: .9rem;
@@ -570,7 +590,6 @@
       border-radius: 2px;
       outline: none;
       cursor: pointer;
-      position: relative;
     }
 
     input[type="range"]::-webkit-slider-thumb {
@@ -587,15 +606,6 @@
     input[type="range"]::-webkit-slider-thumb:hover {
       transform: scale(1.25);
       box-shadow: 0 0 0 4px var(--slate-glow);
-    }
-
-    input[type="range"]::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--slate);
-      border: 2px solid var(--slate-light);
-      cursor: pointer;
     }
 
     .duration-marks {
@@ -618,7 +628,7 @@
     }
 
     .topic-tag {
-      min-height: 44px; /* taille tactile */
+      min-height: 44px;
       display: flex;
       align-items: center;
       padding: .35rem 1rem;
@@ -631,8 +641,6 @@
       cursor: pointer;
       transition: all .25s var(--ease);
       user-select: none;
-      position: relative;
-      overflow: hidden;
     }
 
     .topic-tag:hover {
@@ -752,7 +760,7 @@
     .error-message.active { display: block; animation: fadeUp .3s var(--ease); }
 
     /* ═══════════════════════════════════════
-       LOADING — spinner + proverbes
+       LOADING
     ═══════════════════════════════════════ */
     .loading {
       display: none;
@@ -866,7 +874,6 @@
       letter-spacing: .05em;
     }
 
-    /* Points de navigation */
     .proverb-dots {
       display: flex;
       justify-content: center;
@@ -893,7 +900,6 @@
     .results { display: none; animation: fadeUp .6s var(--ease); }
     .results.active { display: block; }
 
-    /* Header résultat */
     .result-header {
       background: linear-gradient(135deg,
         rgba(91,143,168,.15) 0%,
@@ -952,7 +958,6 @@
       text-overflow: ellipsis;
     }
 
-    /* Contenu leçon */
     .lesson-content {
       background: var(--bg-result);
       border: 1px solid var(--border);
@@ -965,7 +970,6 @@
       color: var(--text-primary);
     }
 
-    /* Typographie contenu Markdown */
     .lesson-content h1,
     .lesson-content h2 {
       font-family: 'Cinzel', serif;
@@ -1005,45 +1009,6 @@
     .lesson-content strong { color: var(--gold-light); font-weight: 600; }
     .lesson-content em { color: var(--text-secondary); }
 
-    .lesson-content code {
-      font-family: 'Courier New', monospace;
-      font-size: .9em;
-      background: rgba(91,143,168,.12);
-      border: 1px solid rgba(91,143,168,.2);
-      color: var(--slate-light);
-      padding: .15em .45em;
-      border-radius: 4px;
-    }
-
-    .lesson-content pre {
-      background: rgba(0,0,0,.4);
-      border: 1px solid var(--border);
-      border-radius: var(--r-md);
-      padding: 1.25rem;
-      overflow-x: auto;
-      margin: 1.25rem 0;
-    }
-
-    .lesson-content pre code {
-      background: none;
-      border: none;
-      padding: 0;
-      font-size: .92em;
-    }
-
-    .lesson-content blockquote {
-      border-left: 3px solid var(--gold);
-      margin: 1rem 0;
-      padding: .5rem 1rem;
-      color: var(--text-secondary);
-      font-style: italic;
-      background: var(--gold-glow);
-      border-radius: 0 var(--r-sm) var(--r-sm) 0;
-    }
-
-    /* ═══════════════════════════════════════
-       BOUTONS ACTION (résultat)
-    ═══════════════════════════════════════ */
     .action-buttons {
       display: flex;
       gap: .6rem;
@@ -1076,50 +1041,137 @@
     }
 
     @media (max-width: 480px) {
+      .container { padding: 2rem 1rem 3rem; }
+      header { margin-bottom: 2rem; }
+      .card { padding: 1.25rem 1rem; }
+      .features-section { margin-bottom: 1.5rem; }
+      .result-title { font-size: 1.1rem; }
       .action-btn { flex: 1; justify-content: center; }
     }
 
-    /* ═══════════════════════════════════════
-       SCROLLBAR
-    ═══════════════════════════════════════ */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: var(--bg-void); }
     ::-webkit-scrollbar-thumb { background: var(--bg-hover); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--violet); }
 
     /* ═══════════════════════════════════════
-       RESPONSIVE — ajustements supplémentaires
-    ═══════════════════════════════════════ */
-    @media (max-width: 480px) {
-      .container { padding: 2rem 1rem 3rem; }
-      header { margin-bottom: 2rem; }
-      .card { padding: 1.25rem 1rem; }
-      .features-section { display: none; }
-      .result-title { font-size: 1.1rem; }
-    }
+   PENTAGRAMME GYROSCOPIQUE
+═══════════════════════════════════════ */
 
-    @media (min-width: 1024px) {
-      .features-grid { grid-template-columns: repeat(6, 1fr); }
-      .flip-wrap { height: 200px; }
-    }
+.pentagram-container {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 130px;
+  height: 130px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.55;
+  animation: fadeInPentagram 1.5s ease forwards;
+}
+
+/* SVG */
+.pentagram-svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Cercles */
+.outer-circle {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1;
+  opacity: 0.35;
+  animation: spinSlow 20s linear infinite;
+}
+
+.middle-circle {
+  fill: none;
+  stroke: var(--slate);
+  stroke-width: 1;
+  opacity: 0.4;
+  animation: spinReverse 14s linear infinite;
+}
+
+/* Étoile */
+.pentagram-star {
+  fill: none;
+  stroke: var(--gold-light);
+  stroke-width: 1.2;
+  opacity: 0.8;
+  filter: drop-shadow(0 0 6px rgba(184,150,90,.35));
+  animation: spinGyro 10s linear infinite;
+}
+
+/* Animations */
+@keyframes spinSlow {
+  from { transform: rotate(0deg); transform-origin: center; }
+  to   { transform: rotate(360deg); transform-origin: center; }
+}
+
+@keyframes spinReverse {
+  from { transform: rotate(360deg); transform-origin: center; }
+  to   { transform: rotate(0deg); transform-origin: center; }
+}
+
+@keyframes spinGyro {
+  0%   { transform: rotate(0deg) scale(1); }
+  50%  { transform: rotate(180deg) scale(1.05); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* Apparition douce */
+@keyframes fadeInPentagram {
+  from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  to   { opacity: 0.55; transform: translateX(-50%) translateY(0); }
+}
+
+
+
   </style>
 </head>
 <body>
 
+
+<div class="pentagram-container" aria-hidden="true">
+  <svg viewBox="0 0 200 200" class="pentagram-svg">
+
+    <!-- Cercle externe -->
+    <circle cx="100" cy="100" r="92" class="outer-circle"/>
+
+    <!-- Cercle intermédiaire -->
+    <circle cx="100" cy="100" r="70" class="middle-circle"/>
+
+    <!-- Pentagramme -->
+    <polygon points="
+      100,15
+      120,80
+      185,80
+      135,120
+      155,185
+      100,145
+      45,185
+      65,120
+      15,80
+      80,80
+    " class="pentagram-star"/>
+
+  </svg>
+</div>
+
+
 <div class="container">
 
-  <!-- ═══════════════════════ HEADER ═══════════════════════ -->
   <header>
     <span class="header-ornament">✦ ◈ ✦</span>
     <h1>Arcan-Ai</h1>
     <p class="subtitle">« Les Arcanes de la Connaissance Transcendante »</p>
   </header>
 
-  <!-- ═══════════════════ FEATURE CARDS ═══════════════════ -->
   <section class="features-section" aria-label="Fonctionnalités">
     <p class="section-title">Les Arcanes Révélées</p>
     <div class="features-grid">
-
       <!-- Card 1 -->
       <div class="flip-wrap" tabindex="0" role="group" aria-label="Apprentissage Adaptatif">
         <div class="flip-inner">
@@ -1129,7 +1181,7 @@
             <div class="feature-desc">L'IA s'adapte à votre essence</div>
             <span class="flip-hint" aria-hidden="true">↺ survoler</span>
           </div>
-          <div class="flip-back" aria-hidden="true">
+          <div class="flip-back">
             <div class="flip-back-title">Votre Profil Cognitif</div>
             <div class="flip-back-items">
               <div class="flip-back-item">
@@ -1158,7 +1210,7 @@
             <div class="feature-desc">Quatre chemins vers le savoir</div>
             <span class="flip-hint" aria-hidden="true">↺ survoler</span>
           </div>
-          <div class="flip-back" aria-hidden="true">
+          <div class="flip-back">
             <div class="flip-back-title">Choisissez Votre Voie</div>
             <div class="flip-back-items">
               <div class="flip-back-item">
@@ -1191,7 +1243,7 @@
             <div class="feature-desc">Toutes les disciplines</div>
             <span class="flip-hint" aria-hidden="true">↺ survoler</span>
           </div>
-          <div class="flip-back" aria-hidden="true">
+          <div class="flip-back">
             <div class="flip-back-title">Univers du Savoir</div>
             <div class="flip-back-items">
               <div class="flip-back-item">
@@ -1220,7 +1272,7 @@
             <div class="feature-desc">Du Novice à l'Archimage</div>
             <span class="flip-hint" aria-hidden="true">↺ survoler</span>
           </div>
-          <div class="flip-back" aria-hidden="true">
+          <div class="flip-back">
             <div class="flip-back-title">Votre Parcours</div>
             <div class="flip-back-items">
               <div class="flip-back-item">
@@ -1249,7 +1301,7 @@
             <div class="feature-desc">Des leçons qui prennent vie</div>
             <span class="flip-hint" aria-hidden="true">↺ survoler</span>
           </div>
-          <div class="flip-back" aria-hidden="true">
+          <div class="flip-back">
             <div class="flip-back-title">Expérience Immersive</div>
             <div class="flip-back-items">
               <div class="flip-back-item">
@@ -1278,7 +1330,7 @@
             <div class="feature-desc">L'IA au service du savoir</div>
             <span class="flip-hint" aria-hidden="true">↺ survoler</span>
           </div>
-          <div class="flip-back" aria-hidden="true">
+          <div class="flip-back">
             <div class="flip-back-title">Puissance Cosmique</div>
             <div class="flip-back-items">
               <div class="flip-back-item">
@@ -1297,13 +1349,10 @@
           </div>
         </div>
       </div>
-
     </div>
   </section>
 
-  <!-- ═══════════════════════ FORMULAIRE ═══════════════════ -->
   <div class="card" role="main">
-
     <div class="info-box">
       <h3>⟡ L'Alchimie de l'Apprentissage</h3>
       <p>Forgez une leçon sur mesure en configurant votre profil ci-dessous. Chaque enseignement est adapté à votre niveau, votre style et vos thèmes.</p>
@@ -1313,8 +1362,6 @@
 
     <form id="tutorForm" novalidate>
       <div class="form-grid">
-
-        <!-- Sujet -->
         <div class="form-group">
           <label for="subject">📜 Domaine de Sagesse</label>
           <div class="input-wrap">
@@ -1340,7 +1387,6 @@
           </div>
         </div>
 
-        <!-- Niveau -->
         <div class="form-group">
           <label for="level">⚔️ Rang d'Initié</label>
           <div class="input-wrap">
@@ -1358,7 +1404,6 @@
           </div>
         </div>
 
-        <!-- Style -->
         <div class="form-group">
           <label for="learningStyle">🔮 Voie de Perception</label>
           <div class="input-wrap">
@@ -1374,7 +1419,6 @@
           </div>
         </div>
 
-        <!-- Modèle -->
         <div class="form-group">
           <label for="model">⚙️ Entité Mystique</label>
           <div class="input-wrap">
@@ -1385,10 +1429,8 @@
             <span class="select-arrow" aria-hidden="true">▾</span>
           </div>
         </div>
+      </div>
 
-      </div><!-- /.form-grid -->
-
-      <!-- Durée -->
       <div class="form-group full-width" style="margin-bottom:1.5rem">
         <label for="duration">⏳ Durée du Rituel</label>
         <div class="duration-row">
@@ -1401,7 +1443,6 @@
         </div>
       </div>
 
-      <!-- Thèmes -->
       <div class="form-group full-width" style="margin-bottom:1.5rem">
         <label>✨ Arcanes à Explorer</label>
         <div id="topicsContainer" class="topics-container" role="group" aria-label="Thèmes disponibles"></div>
@@ -1417,11 +1458,9 @@
       <button type="submit" class="generate-btn" id="generateBtn">
         ⟡ Invoquer la Connaissance Cosmique ⟡
       </button>
-
     </form>
-  </div><!-- /.card -->
+  </div>
 
-  <!-- ═══════════════════════ LOADING ══════════════════════ -->
   <div id="loading" class="loading card" aria-live="polite" aria-busy="false">
     <div class="spinner-wrap" aria-hidden="true">
       <div class="spinner-outer"></div>
@@ -1429,18 +1468,12 @@
       <div class="spinner-dot"></div>
     </div>
     <h3 class="loading-title">⟡ Ouverture du Portail ⟡</h3>
-
-    <div class="proverb-carousel" id="provCarousel" aria-label="Proverbes de sagesse" aria-live="polite">
-      <!-- Les slides sont injectées par JS -->
-    </div>
-
+    <div class="proverb-carousel" id="provCarousel" aria-label="Proverbes de sagesse" aria-live="polite"></div>
     <div class="proverb-dots" id="provDots" aria-hidden="true"></div>
   </div>
 
-  <!-- ═══════════════════════ RÉSULTATS ════════════════════ -->
   <div id="results" class="results" aria-live="polite">
     <div class="card" style="padding:0; overflow:hidden;">
-
       <div class="result-header">
         <h2 class="result-title" id="resultTitle">Votre Grimoire Personnel</h2>
         <div class="result-meta" role="list">
@@ -1462,26 +1495,19 @@
           </div>
         </div>
       </div>
-
       <div class="lesson-content" id="lessonContent"></div>
-
-    </div><!-- /.card -->
-
+    </div>
     <div class="action-buttons">
       <button class="action-btn" onclick="copyLesson()">📋 Copier</button>
       <button class="action-btn" onclick="downloadLesson()">💾 Sauvegarder</button>
       <button class="action-btn" onclick="window.print()">🖨️ Imprimer</button>
     </div>
-
-  </div><!-- /#results -->
-
-</div><!-- /.container -->
+  </div>
+</div>
 
 <script>
-  // ── État ─────────────────────────────────────────────────
   const state = { selectedTopics: new Set(), currentLesson: '' };
 
-  // ── Thèmes par sujet ──────────────────────────────────────
   const topicsBySubject = {
     'mathématiques': ['Algèbre des Sphères', 'Géométrie Sacrée', 'Analyse Transcendantale', 'Probabilités Cosmiques', 'Statistiques Ésotériques', 'Arithmétique Ancienne'],
     'français':      ['Grammaire des Anciens', 'Orthographe Runique', 'Conjugaison Temporelle', 'Littérature Mystique', 'Expression des Arcanes', 'Vocabulaire Alchimique'],
@@ -1502,12 +1528,12 @@
   const aliasMap = {
     'mathematiques':'mathématiques','maths':'mathématiques','math':'mathématiques',
     'francais':'français','lettres':'français',
-    'svt':'sciences','science':'sciences','physique-chimie':'physique',
+    'svt':'sciences','science':'sciences',
     'histoire-géo':'histoire','histoire-geo':'histoire',
     'geographie':'géographie','geo':'géographie','géo':'géographie',
     'english':'anglais',
     'philo':'philosophie',
-    'info':'informatique','programmation':'informatique','code':'informatique',
+    'info':'informatique','programmation':'informatique',
     'alchimie':'chimie',
     'bio':'biologie',
     'economie':'économie','eco':'économie','ses':'économie',
@@ -1522,31 +1548,28 @@
     return topicsBySubject[resolved] || null;
   }
 
-  // ── DOM refs ──────────────────────────────────────────────
-  const form             = document.getElementById('tutorForm');
-  const generateBtn      = document.getElementById('generateBtn');
-  const loading          = document.getElementById('loading');
-  const results          = document.getElementById('results');
-  const errorMsg         = document.getElementById('errorMsg');
-  const topicsContainer  = document.getElementById('topicsContainer');
+  const form = document.getElementById('tutorForm');
+  const generateBtn = document.getElementById('generateBtn');
+  const loading = document.getElementById('loading');
+  const results = document.getElementById('results');
+  const errorMsg = document.getElementById('errorMsg');
+  const topicsContainer = document.getElementById('topicsContainer');
   const customTopicInput = document.getElementById('customTopic');
-  const addTopicBtn      = document.getElementById('addTopicBtn');
-  const durationSlider   = document.getElementById('duration');
-  const durationDisplay  = document.getElementById('durationDisplay');
-  const subjectSelect    = document.getElementById('subject');
+  const addTopicBtn = document.getElementById('addTopicBtn');
+  const durationSlider = document.getElementById('duration');
+  const durationDisplay = document.getElementById('durationDisplay');
+  const subjectSelect = document.getElementById('subject');
 
-  // ── Mise à jour du slider durée ───────────────────────────
   durationSlider.addEventListener('input', e => {
     const v = parseInt(e.target.value);
     durationDisplay.textContent = v >= 60 ? `${v/60}h${v%60 ? (v%60)+'min' : ''}` : `${v} min`;
     e.target.setAttribute('aria-valuenow', v);
   });
 
-  // ── Mise à jour des thèmes selon le sujet sélectionné ─────
   subjectSelect.addEventListener('change', updateTopics);
 
   function updateTopics() {
-    const raw    = subjectSelect.value;
+    const raw = subjectSelect.value;
     const topics = raw ? (getTopicsFor(raw) || DEFAULT_TOPICS) : DEFAULT_TOPICS;
 
     topicsContainer.innerHTML = '';
@@ -1554,10 +1577,10 @@
 
     topics.forEach(topic => {
       const tag = document.createElement('button');
-      tag.type          = 'button';
-      tag.className     = 'topic-tag';
+      tag.type = 'button';
+      tag.className = 'topic-tag';
       tag.dataset.topic = topic;
-      tag.textContent   = topic;
+      tag.textContent = topic;
       tag.setAttribute('aria-pressed', 'false');
       topicsContainer.appendChild(tag);
     });
@@ -1565,17 +1588,15 @@
 
   updateTopics();
 
-  // ── Sélection tags ────────────────────────────────────────
   topicsContainer.addEventListener('click', e => {
     const tag = e.target.closest('.topic-tag');
     if (!tag) return;
-    const topic   = tag.dataset.topic;
+    const topic = tag.dataset.topic;
     const pressed = tag.classList.toggle('selected');
     tag.setAttribute('aria-pressed', pressed ? 'true' : 'false');
     pressed ? state.selectedTopics.add(topic) : state.selectedTopics.delete(topic);
   });
 
-  // ── Thème personnalisé ────────────────────────────────────
   addTopicBtn.addEventListener('click', addCustomTopic);
   customTopicInput.addEventListener('keypress', e => {
     if (e.key === 'Enter') { e.preventDefault(); addCustomTopic(); }
@@ -1585,10 +1606,10 @@
     const val = customTopicInput.value.trim();
     if (!val) return;
     const tag = document.createElement('button');
-    tag.type          = 'button';
-    tag.className     = 'topic-tag selected';
+    tag.type = 'button';
+    tag.className = 'topic-tag selected';
     tag.dataset.topic = val;
-    tag.textContent   = val;
+    tag.textContent = val;
     tag.setAttribute('aria-pressed', 'true');
     topicsContainer.appendChild(tag);
     state.selectedTopics.add(val);
@@ -1596,20 +1617,19 @@
     customTopicInput.focus();
   }
 
-  // ── Soumission ────────────────────────────────────────────
   form.addEventListener('submit', async e => {
     e.preventDefault();
 
-    const subject       = subjectSelect.value.trim();
-    const level         = document.getElementById('level').value;
+    const subject = subjectSelect.value.trim();
+    const level = document.getElementById('level').value;
     const learningStyle = document.getElementById('learningStyle').value;
-    const duration      = parseInt(durationSlider.value);
-    const model         = document.getElementById('model').value;
-    const topics        = Array.from(state.selectedTopics);
+    const duration = parseInt(durationSlider.value);
+    const model = document.getElementById('model').value;
+    const topics = Array.from(state.selectedTopics);
 
-    if (!subject)            { showError('Veuillez sélectionner un domaine de sagesse.'); return; }
-    if (!level)              { showError('Veuillez choisir votre rang d\'initié.'); return; }
-    if (!learningStyle)      { showError('Veuillez sélectionner votre voie de perception.'); return; }
+    if (!subject) { showError('Veuillez sélectionner un domaine de sagesse.'); return; }
+    if (!level) { showError('Veuillez choisir votre rang d\'initié.'); return; }
+    if (!learningStyle) { showError('Veuillez sélectionner votre voie de perception.'); return; }
     if (topics.length === 0) { showError('Veuillez sélectionner au moins un arcane à explorer.'); return; }
 
     hideError();
@@ -1620,9 +1640,9 @@
 
     try {
       const response = await fetch('/api/generate', {
-        method:  'POST',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ subject, level, learning_style: learningStyle, topics, duration, model })
+        body: JSON.stringify({ subject, level, learning_style: learningStyle, topics, duration, model })
       });
       const data = await response.json();
       data.success ? displayResults(data) : showError(data.error || 'Les forces cosmiques sont perturbées.');
@@ -1636,15 +1656,14 @@
     }
   });
 
-  // ── Affichage résultats ───────────────────────────────────
   function displayResults(data) {
     state.currentLesson = data.lesson;
 
-    document.getElementById('resultTitle').textContent  = `⟡ ${data.subject} — Grimoire Révélé`;
-    document.getElementById('metaSubject').textContent  = data.subject;
+    document.getElementById('resultTitle').textContent = `⟡ ${data.subject} — Grimoire Révélé`;
+    document.getElementById('metaSubject').textContent = data.subject;
     document.getElementById('metaDuration').textContent = `${data.duration} min`;
-    document.getElementById('metaStyle').textContent    = data.learning_style;
-    document.getElementById('metaTopics').textContent   =
+    document.getElementById('metaStyle').textContent = data.learning_style;
+    document.getElementById('metaTopics').textContent =
       data.topics.slice(0, 2).join(', ') + (data.topics.length > 2 ? `… +${data.topics.length - 2}` : '');
 
     document.getElementById('lessonContent').innerHTML = marked.parse(data.lesson);
@@ -1653,7 +1672,6 @@
     results.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  // ── Actions ───────────────────────────────────────────────
   function copyLesson() {
     navigator.clipboard.writeText(state.currentLesson)
       .then(() => showSuccess('Leçon copiée dans le presse-papier.'))
@@ -1661,21 +1679,20 @@
   }
 
   function downloadLesson() {
-    const subject  = subjectSelect.value || 'lecon';
-    const blob     = new Blob([state.currentLesson], { type: 'text/plain;charset=utf-8' });
-    const url      = URL.createObjectURL(blob);
-    const a        = document.createElement('a');
-    a.href         = url;
-    a.download     = `arcan-ai-${subject.toLowerCase()}.txt`;
+    const subject = subjectSelect.value || 'lecon';
+    const blob = new Blob([state.currentLesson], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `arcan-ai-${subject.toLowerCase()}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   }
 
-  // ── Feedback messages ─────────────────────────────────────
   function showError(msg) {
     errorMsg.textContent = '⚠ ' + msg;
-    errorMsg.className   = 'error-message active';
-    errorMsg.style.background  = 'var(--red-bg)';
+    errorMsg.className = 'error-message active';
+    errorMsg.style.background = 'var(--red-bg)';
     errorMsg.style.borderColor = 'rgba(192,80,74,.35)';
     errorMsg.style.borderLeftColor = 'var(--red)';
     errorMsg.style.color = '#e08888';
@@ -1685,8 +1702,8 @@
 
   function showSuccess(msg) {
     errorMsg.textContent = '✓ ' + msg;
-    errorMsg.className   = 'error-message active';
-    errorMsg.style.background  = 'var(--green-bg)';
+    errorMsg.className = 'error-message active';
+    errorMsg.style.background = 'var(--green-bg)';
     errorMsg.style.borderColor = 'rgba(90,154,106,.35)';
     errorMsg.style.borderLeftColor = 'var(--green)';
     errorMsg.style.color = '#8dcf9a';
@@ -1694,23 +1711,27 @@
     errorMsg._t = setTimeout(hideError, 3000);
   }
 
-  // ── Flip cards — support tactile (tap pour mobile) ───────
+  function hideError() { errorMsg.classList.remove('active'); }
+
   document.querySelectorAll('.flip-wrap').forEach(card => {
-    card.addEventListener('click', () => {
-      // Sur touch, le hover CSS ne se déclenche pas — on toggle une classe
-      card.classList.toggle('flipped');
+    card.addEventListener('click', function(e) {
+      if (window.innerWidth <= 768) {
+        e.stopPropagation();
+        this.classList.toggle('flipped');
+      }
     });
   });
 
-  // Surcharge CSS pour la classe .flipped (touch)
   const flipStyle = document.createElement('style');
   flipStyle.textContent = `
     .flip-wrap.flipped .flip-inner { transform: rotateY(180deg); }
-    .flip-wrap.flipped .flip-hint  { opacity: 0; }
+    .flip-wrap.flipped .flip-hint { opacity: 0; }
+    @media (max-width: 768px) {
+      .flip-wrap { cursor: pointer; }
+    }
   `;
   document.head.appendChild(flipStyle);
 
-  // ── Proverbes affichés pendant le loading ─────────────────
   const PROVERBS = [
     { text: '« La connaissance est un trésor, mais la pratique en est la clé. »', source: '— Thomas Fuller' },
     { text: '« Dis-moi et j\'oublie, enseigne-moi et je me souviens, implique-moi et j\'apprends. »', source: '— Benjamin Franklin' },
@@ -1720,34 +1741,20 @@
     { text: '« L\'intelligence, c\'est la capacité de s\'adapter au changement. »', source: '— Stephen Hawking' },
     { text: '« Un esprit qui s\'est ouvert à une nouvelle idée ne retrouve jamais ses dimensions d\'origine. »', source: '— Albert Einstein' },
     { text: '« On ne reçoit pas la sagesse, il faut la découvrir soi-même. »', source: '— Marcel Proust' },
-    { text: '« Apprendre sans réfléchir est inutile. Réfléchir sans apprendre est dangereux. »', source: '— Confucius' },
-    { text: '« L\'ignorance est l\'ennemi, pas la difficulté. »', source: '— Proverbe africain' },
-    { text: '« Voyage dans le pays de la connaissance, car elle ne t\'abandonnera jamais. »', source: '— Proverbe arabe' },
-    { text: '« Plus je vis, plus je réalise que tout est dans l\'attitude. »', source: '— Charles R. Swindoll' },
-    { text: '« Le seul vrai voyage de découverte consiste non pas à chercher de nouveaux paysages, mais à avoir de nouveaux yeux. »', source: '— Marcel Proust' },
-    { text: '« Nul n\'est sage à toute heure. »', source: '— Proverbe latin' },
-    { text: '« L\'erreur est humaine, mais s\'y vautrer est diabolique. »', source: '— Saint Augustin' },
-    { text: '« La curiosité est le premier pas vers la compréhension. »', source: '— Proverbe zen' },
-    { text: '« Même un bambou courbé projette une ombre droite. »', source: '— Proverbe japonais' },
-    { text: '« L\'océan se forme d\'une seule goutte. »', source: '— Proverbe persan' },
   ];
 
-  let provIndex  = 0;
-  let provTimer  = null;
+  let provIndex = Math.floor(Math.random() * PROVERBS.length);
+  let provTimer = null;
   let provActive = false;
 
   const carousel = document.getElementById('provCarousel');
-  const dotsEl   = document.getElementById('provDots');
-
-  // Choisir un point de départ aléatoire
-  provIndex = Math.floor(Math.random() * PROVERBS.length);
+  const dotsEl = document.getElementById('provDots');
 
   function buildCarousel() {
     carousel.innerHTML = '';
-    dotsEl.innerHTML   = '';
+    dotsEl.innerHTML = '';
 
     PROVERBS.forEach((p, i) => {
-      // Slide
       const slide = document.createElement('div');
       slide.className = 'proverb-slide' + (i === provIndex ? ' active' : '');
       slide.innerHTML = `
@@ -1757,13 +1764,11 @@
       `;
       carousel.appendChild(slide);
 
-      // Dot
       const dot = document.createElement('span');
       dot.className = 'proverb-dot' + (i === provIndex ? ' active' : '');
       dotsEl.appendChild(dot);
     });
 
-    // Hauteur fixe = hauteur du slide le plus grand
     requestAnimationFrame(() => {
       const slides = carousel.querySelectorAll('.proverb-slide');
       let maxH = 0;
@@ -1780,9 +1785,8 @@
 
   function showProverb(idx) {
     const slides = carousel.querySelectorAll('.proverb-slide');
-    const dots   = dotsEl.querySelectorAll('.proverb-dot');
+    const dots = dotsEl.querySelectorAll('.proverb-dot');
 
-    // Exit current
     slides[provIndex].classList.remove('active');
     slides[provIndex].classList.add('exit');
     dots[provIndex].classList.remove('active');
@@ -1809,15 +1813,10 @@
   function stopCarousel() {
     provActive = false;
     clearInterval(provTimer);
-    carousel.innerHTML = '';
-    dotsEl.innerHTML   = '';
+    if (carousel) carousel.innerHTML = '';
+    if (dotsEl) dotsEl.innerHTML = '';
   }
 
-  // ── Intégration avec le loading ───────────────────────────
-  // On surcharge les fonctions start/stop du loading
-  const _origSubmit = form.onsubmit;
-
-  // Observer le loading pour démarrer/stopper le carrousel
   const loadObs = new MutationObserver(() => {
     if (loading.classList.contains('active')) {
       startCarousel();
@@ -1827,7 +1826,16 @@
   });
   loadObs.observe(loading, { attributes: true, attributeFilter: ['class'] });
 
-  function hideError() { errorMsg.classList.remove('active'); }
+
+  const pentagram = document.querySelector(".pentagram-container");
+
+document.addEventListener("mousemove", (e) => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 8;
+  const y = (e.clientY / window.innerHeight - 0.5) * 8;
+
+  pentagram.style.transform =
+    `translateX(-50%) rotateX(${y}deg) rotateY(${x}deg)`;
+});
 </script>
 
 </body>
